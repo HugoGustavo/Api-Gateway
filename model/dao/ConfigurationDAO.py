@@ -1,10 +1,12 @@
+import os
 import configparser
 
+os.path.abspath(os.path.join('conf/conf', os.pardir))
 class ConfigurationDAO(object):
     def __init__(self, section):
         self.__section = section
         self.__properties = {}
-        self.__FILE = '/home/gateway/gateway-application/conf/apigateway.conf'
+        self.__FILE = os.path.abspath(os.path.join('conf/conf', os.pardir)) + '/apigateway.conf'
 
     def get(self, key):
         if ( key not in self.__properties ):
