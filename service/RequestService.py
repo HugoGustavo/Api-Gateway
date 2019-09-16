@@ -2,14 +2,14 @@ import re
 import sqlite3
 
 from model.Request import Request
+from service.VM9ITService import VM9ITService
 from model.dao.ConfigurationDAO import ConfigurationDAO
-from service.FiwareOrionService import FiwareOrionService
 from repository.RequestRepository import RequestRepository
 
-class RequestService(object):
+class RequestService(object): 
     def __init__(self):
         self.__properties = ConfigurationDAO('ApiGatewayResponse')
-        self.__fiwareOrionService = FiwareOrionService()
+        self.__vm9itService = VM9ITService()
         
     def save(self, request):
         connection = sqlite3.connect('ApiGateway.db')
@@ -38,10 +38,10 @@ class RequestService(object):
             request.setReplyChannel(self.__properties.get('topic.subscribe.broker'))
         
         if ( "GET" == request.getMethod() ): 
-            self.__fiwareOrionService.read(request)
+            self.__vm9itService.read(request)
         elif ( "POST" == request.getMethod() ): 
-            self.__fiwareOrionService.create(request)
-        elif ( "PATCH" == request.getMethod() ):
-            self.__fiwareOrionService.update(request)
+            self.__vm9itService.create(request)
+        elif ( "PATCH" == request.getMethod() or "PUT" == request.getMethod() ):
+            self.__vm9itService.update(request)
         elif ( "DELETE" == request.getMethod() ):
-            self.__fiwareOrionService.delete(request)
+            self.__vm9itService.delete(request)
