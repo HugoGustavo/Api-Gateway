@@ -1,13 +1,10 @@
 import json
 import requests
 
-from util.Logger import Logger
 from model.Request import Request
 from model.Response import Response
 from util.VM9ITConnection import VM9ITConnection
 from producer.ResponseProducer import ResponseProducer
-from model.dao.ConfigurationDAO import ConfigurationDAO
-
 
 class VM9ITService(object):
     def __init__(self):
