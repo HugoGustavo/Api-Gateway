@@ -1,5 +1,6 @@
 import json
 import datetime
+import requests
 import http.client
 
 from util.Logger import Logger
@@ -9,8 +10,33 @@ from model.dao.ConfigurationDAO import ConfigurationDAO
 class VM9ITConnection(object):
     def __init__(self):
         self.__properties = ConfigurationDAO('VM9IT')
+        self.__address = self.__properties.get('address')
+        self.__port = self.__properties.get('port')
+        self.__url = 'http://' + self.__address + ':' + self.__port
 
-    def getHeader(self):
+    def doGet(self, uri):
+        header = self.__getHeader()
+        responseGet = requests.get(self.__url + uri, headers=header)
+        return responseGet
+
+    def doPost(self, uri, body):
+        header = self.__getHeader()
+        bodyJson = json.loads(body.replace("'", '"'))
+        responsePost = requests.post(self.__url + uri, json=bodyJson, headers=header)
+        return responsePost
+
+    def doPut(self, uri, body):
+        header = self.__getHeader()
+        bodyJson = json.loads(body.replace("'", '"'))
+        responsePut = requests.put(self.__url + uri, json=bodyJson, headers=header)
+        return responsePut
+
+    def doDelete(self, uri):
+        header = self.__getHeader()
+        responseDelete = requests.delete(self.__url + uri, headers=header)
+        return responseDelete
+
+    def __getHeader(self):
         authentication = Authentication.getInstance()
         if ( not authentication.getToken() ) or authentication.hasExpired():
             address = self.__properties.get('address')
@@ -34,5 +60,5 @@ class VM9ITConnection(object):
             
         header = dict()
         header['Authorization'] = authentication.getType() + ' ' + authentication.getToken()
-        Logger.info('Authorization: ' + str(header['Authorization']))
+
         return header

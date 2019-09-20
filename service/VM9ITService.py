@@ -11,16 +11,11 @@ from model.dao.ConfigurationDAO import ConfigurationDAO
 
 class VM9ITService(object):
     def __init__(self):
-        self.__properties = ConfigurationDAO('VM9IT')
-        self.__address = self.__properties.get('address')
-        self.__port = self.__properties.get('port')
-        self.__url = 'http://' + self.__address + ':' + self.__port
         self.__responseProducer = ResponseProducer()
+        self.__vm9itConnection = VM9ITConnection()
 
     def read(self, request):
-        vm9itConnection = VM9ITConnection()
-        header = vm9itConnection.getHeader()
-        responseGet = requests.get(self.__url + request.getUri(), headers=header)
+        responseGet = self.__vm9itConnection.doGet(request.getUri())
 
         response = Response()
         response.setId(request.getId())
@@ -36,11 +31,7 @@ class VM9ITService(object):
         self.__responseProducer.produce(response) 
     
     def create(self, request):
-        vm9itConnection = VM9ITConnection()
-        header = vm9itConnection.getHeader()
-
-        body = json.loads(request.getBody().replace("'", '"'))
-        responsePost = requests.post(self.__url + request.getUri(), json=body, headers=header)
+        responsePost = self.__vm9itConnection.doPost(request.getUri(), request.getBody())
 
         response = Response()
         response.setId(request.getId())
@@ -56,11 +47,7 @@ class VM9ITService(object):
         self.__responseProducer.produce(response)
 
     def update(self, request):
-        vm9itConnection = VM9ITConnection()
-        header = vm9itConnection.getHeader()
-
-        body = json.loads(request.getBody().replace("'", '"'))
-        responsePut = requests.put(self.__url + request.getUri(), json=body, headers=header)
+        responsePut = self.__vm9itConnection.doPut(request.getUri(), request.getBody())
 
         response = Response()
         response.setId(request.getId())
@@ -76,10 +63,7 @@ class VM9ITService(object):
         self.__responseProducer.produce(response)
 
     def delete(self, request):
-        vm9itConnection = VM9ITConnection()
-        header = vm9itConnection.getHeader()
-
-        responseDelete = requests.delete(self.__url + request.getUri(), headers=header)
+        responseDelete = self.__vm9itConnection.doDelete(request.getUri())
 
         response = Response()
         response.setId(request.getId())
