@@ -12,7 +12,7 @@ class FiwareOrionService(object):
         self.__properties = ConfigurationDAO('FiwareOrionBroker')
         self.__address = self.__properties.get('address')
         self.__port = self.__properties.get('port')
-        self.__url = 'http://' + self.__address + ':' + self.__port + '/v2'
+        self.__url = 'http://' + self.__address + ':' + self.__port
         self.__responseProducer = ResponseProducer()
 
     def read(self, request):
