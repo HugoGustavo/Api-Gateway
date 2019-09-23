@@ -10,7 +10,7 @@ pip3 install paho-mqtt
 echo "sudo openvpn --config $(pwd)/conf/client.ovpn --daemon openvpn-gateway" >> init.sh
 echo "nohup python3 $(pwd)/ApiGatewayApplication.py &" >> init.sh
 sudo cp -ra init.sh /etc/init.d/
-sudo chmod 755 /etc/init.d/init.sh
+sudo chmod 777 /etc/init.d/init.sh
 sudo chown root:root /etc/init.d/init.sh
 
 # Permissao para criar nohup da aplicacao
