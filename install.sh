@@ -15,7 +15,7 @@ installApplication(){
 }
 
 createOpenVPNService(){
-    sudo mv client.opvn /etc/openvpn/client.conf
+    sudo cp -ra client.ovpn /etc/openvpn/client.conf
     sudo systemctl enable openvpn@client.service
     sudo service openvpn@client start
 }
