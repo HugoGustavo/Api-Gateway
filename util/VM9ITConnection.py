@@ -50,15 +50,13 @@ class VM9ITConnection(object):
             
             conn = http.client.HTTPConnection(url)
             conn.request("POST", "/api/v1/access_token", payload, headers)
-
             response = json.loads(str(conn.getresponse().read().decode("utf-8")))
 
             authentication.setLast(datetime.datetime.now())
             authentication.setToken(str(response['access_token']))
             authentication.setType(str(response['token_type']))
             authentication.setExpires(int(response['expires_in']))
-            
+
         header = dict()
         header['Authorization'] = authentication.getType() + ' ' + authentication.getToken()
-
         return header

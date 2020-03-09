@@ -29,7 +29,6 @@ class VM9ITService(object):
     
     def create(self, request):
         responsePost = self.__vm9itConnection.doPost(request.getUri(), request.getBody())
-
         response = Response()
         response.setId(request.getId())
         response.setReplyHost(str(request.getReplyHost()))
@@ -40,10 +39,11 @@ class VM9ITService(object):
         response.setStatusMessage(str(responsePost.reason))
         response.setHeader(str(responsePost.headers))
         response.setBody(str(responsePost.text))
-
+        
         self.__responseProducer.produce(response)
 
     def update(self, request):
+        print(str(request))
         responsePut = self.__vm9itConnection.doPut(request.getUri(), request.getBody())
 
         response = Response()
@@ -57,6 +57,7 @@ class VM9ITService(object):
         response.setHeader(str(responsePut.headers))
         response.setBody(str(responsePut.text))
 
+        print(str(response))
         self.__responseProducer.produce(response)
 
     def delete(self, request):
