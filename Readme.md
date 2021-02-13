@@ -46,7 +46,7 @@ Abaixo está o formato de envio de uma requisição de enviado pelo Arduino. Os 
 			"replyPort": 1883, 
 			"replyChannel": "arduino", 
 			"method": "POST", 
-			"uri": "/entities", 
+			"uri": "/v2/entities", 
 			"header": {}, 
 			"body": {
 				"id": "waterQualityObserved-Arduino-2457163", 
