@@ -75,10 +75,9 @@ Abaixo está o formato de envio de uma requisição de enviado pelo Arduino. Os 
 					"value": ["NO3, 0.01, M1, Concentration of Nitrates"]}, 
 					"conductivity": {
 						"value": 101
-					}
-				}
+		    		}
 			}
-    	}
+		}
 
 ### Response
 Abaixo está o formato de resposta de uma requisição de enviado pelo Arduino. Os campos podem ser entendidos da seguinte forma:
