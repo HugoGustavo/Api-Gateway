@@ -18,7 +18,7 @@ Para fazer o download, basta clonar o repositório git localmente em um local de
 Para fazer a instalação, basta executar o script `install.sh`.
 
 ## Configuração
-Uma vez clonado e instalado, há um arquivo de configuração: `conf/apigateway.conf` . Dentro do arquivo de configuração, é possível configurar onde entrará cada uma das filas utilizadas
+Uma vez clonado e instalado, há um arquivo de configuração: `/usr/bin/api-gateway/conf/apigateway.conf` . Dentro do arquivo de configuração, é possível configurar onde entrará cada uma das filas utilizadas
 pelo API Gateway, a saber: fila request, e fila response. Ambas as filas podem estar dentro de um mesmo broker, ou em brokers diferentes. Basta configurar o IP e a porta de funcionamento. O terceiro item presente é o local onde está instalado o Fiware-Orion-Context Broker, utilizado para armazenar as informações enviado pelo Arduino e redirecionado pelo Raspberry PI.
 
 ## Execução
