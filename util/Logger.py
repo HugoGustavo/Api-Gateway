@@ -1,30 +1,45 @@
+import datetime
+
 class Logger:
     
     @staticmethod
     def debug(message):
-        print('[Debug] ' + str(message))
+        timestamp = str( datetime.datetime.now() )
+        print(timestamp + ' [DEBUG] ' + str( message ))
 
+    
     @staticmethod
     def info(message):
-        print('[Info] ' + str(message))
+        timestamp = str( datetime.datetime.now() )
+        print(timestamp + ' [INFO] ' + str( message ))
 
+    
     @staticmethod
     def warn(message):
-        print('[Warn] ' + str(message))
+        timestamp = str( datetime.datetime.now() )
+        print(timestamp + ' [WARN] ' + str( message ))
+    
     
     @staticmethod
     def error(message):
-        print('[Error] ' + str(message))
+        timestamp = str( datetime.datetime.now() )
+        print(timestamp + ' [ERROR] ' + str( message ))
 
+    
     @staticmethod
     def fatal(message):
-        print('[Fatal] ' + str(message))
+        timestamp = str( datetime.datetime.now() )
+        print(timestamp + ' [FATAL] ' + str( message ))
+    
     
     @staticmethod
     def off(message):
-        print('[Off] ' + str(message))
+        timestamp = str( datetime.datetime.now() )
+        print(timestamp + ' [OFF] ' + str( message ))
+    
     
     @staticmethod
     def trace(message):
-        print('[TRACE] ' + str(message))
+        timestamp = str( datetime.datetime.now() )
+        print(timestamp + ' [TRACE] ' + str( message ))
 

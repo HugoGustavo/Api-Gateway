@@ -1,47 +1,51 @@
 import re
 import sqlite3
 
+from util.Logger import Logger
 from model.Request import Request
+from util.StringUtil import StringUtil
 from model.dao.ConfigurationDAO import ConfigurationDAO
 from service.FiwareOrionService import FiwareOrionService
 from repository.RequestRepository import RequestRepository
 
 class RequestService(object):
-    def __init__(self):
-        self.__properties = ConfigurationDAO('ApiGatewayResponse')
-        self.__fiwareOrionService = FiwareOrionService()
+    def __init__(self, requestRepository, fiwareOrionService):
+        self.__properties = ConfigurationDAO( 'ApiGatewayRequest' )
+        self.__requestRepository = requestRepository
+        self.__fiwareOrionService = fiwareOrionService
         
+    
     def save(self, request):
-        connection = sqlite3.connect('ApiGateway.db')
-        requestRepository = RequestRepository(connection)
-        requestSaved = requestRepository.save(request)
-        connection.commit()
-        connection.close()
+        self.__requestRepository.connect()
+        requestSaved = self.__requestRepository.save( request )
+        self.__requestRepository.commit()
+        self.__requestRepository.disconnect()
         return requestSaved
     
+    
     def findById(self, id):
-        connection = sqlite3.connect('ApiGateway.db')
-        requestRepository = RequestRepository(connection)
-        request = requestRepository.findById(id)
-        connection.close()
+        self.__requestRepository.connect()
+        request = self.__requestRepository.findById( id )
+        self.__requestRepository.disconnect()
         return request
 
+    
     def route(self, request):
         replyHost = request.getReplyHost()
-        replyPort = str(request.getReplyPort()).strip()
+        replyPort = StringUtil.clean( request.getReplyPort() )
         replyChannel = request.getReplyChannel()
 
         if ( replyHost and replyPort and replyChannel ):
-            request = self.save(request)
-            request.setReplyHost(self.__properties.get('address.broker'))
-            request.setReplyPort(self.__properties.get('port.broker'))
-            request.setReplyChannel(self.__properties.get('topic.subscribe.broker'))
+            request = self.save( request )
+            request.setReplyHost( self.__properties.get('address.broker') )
+            request.setReplyPort( self.__properties.get('port.broker') )
+            request.setReplyChannel( self.__properties.get('topic.subscribe.broker') )
         
-        if ( "GET" == request.getMethod() ): 
-            self.__fiwareOrionService.read(request)
-        elif ( "POST" == request.getMethod() ): 
-            self.__fiwareOrionService.create(request)
+        if ( "GET" == request.getMethod() ):
+            self.__fiwareOrionService.read( request )
+        elif ( "POST" == request.getMethod() ):
+            self.__fiwareOrionService.create( request )
         elif ( "PATCH" == request.getMethod() ):
-            self.__fiwareOrionService.update(request)
+            self.__fiwareOrionService.update( request )
         elif ( "DELETE" == request.getMethod() ):
-            self.__fiwareOrionService.delete(request)
+            self.__fiwareOrionService.delete( request )

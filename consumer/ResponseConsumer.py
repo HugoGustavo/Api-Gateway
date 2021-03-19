@@ -4,57 +4,61 @@ import paho.mqtt.client as mqtt
 
 from util.Logger import Logger
 from model.Response import Response
+from util.StringUtil import StringUtil
 from service.ResponseService import ResponseService
 from model.dao.ConfigurationDAO import ConfigurationDAO
 
 class ResponseConsumer(object):
-    def __init__(self):
-        self.__properties = ConfigurationDAO('ApiGatewayResponse')
-        self.__responseService = ResponseService ()
+    def __init__(self, responseService):
+        self.__properties = ConfigurationDAO( 'ApiGatewayResponse' )
+        self.__responseService = responseService
 
-    def __onConnect(self, client, userdata, flags, rc):
-        Logger.info('Connected to Response broker. Client    : ' + str(client))
-        Logger.info('Connected to Response broker. User data : ' + str(userdata))
-        Logger.info('Connected to Response broker. Flags     : ' + str(flags))
-        Logger.info('Connected to Response broker. Connection: ' + str(rc))
 
-    def __onMessage(self, client, userdata, message):
-        Logger.info('Received response. Client   : ' + str(client))
-        Logger.info('Received response. User data: ' + str(userdata))
-        Logger.info('Received response. Message  : ' + str(message))
+    def onConnect(self, client, userdata, flags, rc):
+        pass
 
+
+    def onMessage(self, client, userdata, message):
         response = Response()
-        response_json = json.loads(message.payload)
-        response.setId(response_json['id'])
-        response.setReplyHost(str(response_json['replyHost']).strip())
-        response.setReplyPort(int(response_json['replyPort']))
-        response.setReplyChannel(str(response_json['replyChannel']).strip())
-        response.setVersionProtocol(str(response_json['versionProtocol']).strip())
-        response.setStatusCode(response_json['statusCode'])
-        response.setStatusMessage(str(response_json['statusMessage']).strip())
-        response.setHeader(str(response_json['header']).strip())
-        response.setBody(str(response_json['body']).strip())
+        response_json = StringUtil.toJson(message.payload)
+        response.setId( response_json['id'] )
+        response.setReplyHost( StringUtil.clean(response_json['replyHost']) )
+        response.setReplyPort( StringUtil.toInt(response_json['replyPort']) )
+        response.setReplyChannel( StringUtil.clean(response_json['replyChannel']) )
+        response.setVersionProtocol( StringUtil.clean(response_json['versionProtocol']) )
+        response.setStatusCode( response_json['statusCode'] )
+        response.setStatusMessage( StringUtil.clean(response_json['statusMessage']) )
+        response.setHeader( StringUtil.clean(response_json['header']) )
+        response.setBody( StringUtil.clean(response_json['body']) )
+        response.setArriveTime( StringUtil.toFloat(response_json.get('arriveTime', None)) )
+        response.setDepartureTime( None )
 
         self.__responseService.route(response)
 
-    def __onConsume(self):
+
+    def onConsume(self):
         try:
             Logger.info("Initializing MQTT Response ...")
             self.__client = mqtt.Client()
-            self.__client.on_connect = self.__onConnect
-            self.__client.on_message = self.__onMessage
+            self.__client.on_connect = self.onConnect
+            self.__client.on_message = self.onMessage
 
-            broker = self.__properties.get('address.broker')
-            port = int(self.__properties.get('port.broker'))
-            keepAliveBroker = int(self.__properties.get('keep.alive.broker'))
-            subscribe = self.__properties.get('topic.subscribe.broker')
+            broker = StringUtil.clean( self.__properties.get('address.broker') )
+            port = StringUtil.toInt( self.__properties.get('port.broker') )
+            keepAliveBroker = StringUtil.toInt( self.__properties.get('keep.alive.broker') )
+            subscribe = StringUtil.clean( self.__properties.get('topic.subscribe.broker') )
 
             self.__client.connect(broker, port, keepAliveBroker)
-            self.__client.subscribe(subscribe)
+            self.__client.subscribe( subscribe )
             self.__client.loop_forever()
         except Exception as exception:
-            Logger.error("MQTT Response failed. Cause: " + str(exception))
+            classpath = 'consumer.ResponseConsumer.onConsume'
+            parameters = StringUtil.clean({ })
+            exceptionMessage = StringUtil.clean(exception)
+            message = classpath + '  ' + parameters  + '  ' + exceptionMessage
+            Logger.error( message )
+        
 
     def consume(self):
-        thread = threading.Thread(target = self.__onConsume)
+        thread = threading.Thread(target = self.onConsume)
         thread.start()

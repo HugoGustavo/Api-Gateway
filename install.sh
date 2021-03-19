@@ -4,7 +4,9 @@ installDependencies(){
     sudo apt-get -y install openvpn
     sudo apt-get -y install python3-pip
     sudo apt-get -y install sqlite3
+    sudo -H pip3 install prometheus-client
     sudo -H pip3 install paho-mqtt
+    sudo -H pip3 install psutil
 }
 
 installApplication(){
