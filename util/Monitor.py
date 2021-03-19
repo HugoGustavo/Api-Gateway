@@ -1,4 +1,5 @@
 import json
+import time
 import enum
 import threading
 import prometheus_client
@@ -89,6 +90,7 @@ class Monitor(object):
         type = MetricType.GAUGE if metric.getType() == None else metric.getType()
         labels = ListUtil.getNoneAsEmpty( metric.getLabels() )
         labelNames = ListUtil.toTuple([ name for ( name, _ ) in labels ])
+        labelValues = ListUtil.toTuple([ value for ( _ , value ) in labels ])
         value = StringUtil.toFloat( metric.getValue() )
 
         savedMetric = self.__metrics.get(name, None)
@@ -102,8 +104,9 @@ class Monitor(object):
         if ListUtil.isEmpty(labels):
             savedMetric._value.set( value )        
         else:
-            labels = ListUtil.toDict(labels)
-            savedMetric.labels( labels )._value.set( value )
+            savedMetric.labels( *labelValues )._value.set( value )
+
+        if( type == MetricType.GAUGE ): savedMetric._created = time.time()
 
         self.__metrics[name] = savedMetric
         

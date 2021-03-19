@@ -27,18 +27,18 @@ class MonitoringRequestConsumer(object):
         request_json['arriveTime'] = time.time()
         message.payload = JsonUtil.toString(request_json)
 
-        metric = Monitor.getInstance().findByName( 'app_api_request_total' )
+        metric = Monitor.getInstance().findByName( 'app_request_total' )
         metric = Metric() if metric == None else metric
-        metric.setName( 'app_api_request_total' )
+        metric.setName( 'app_request_total' )
         metric.setDescription( 'Total number of API request' )
         metric.setType( MetricType.COUNTER )
         metric.setLabels( None )
         metric.setValue( metric.getValue() + 1 )
         Monitor.getInstance().save( metric )
 
-        metric = Monitor.getInstance().findByName( 'app_api_request_bytes_total' )
+        metric = Monitor.getInstance().findByName( 'app_request_bytes_total' )
         metric = Metric() if metric == None else metric
-        metric.setName( 'app_api_request_bytes_total' )
+        metric.setName( 'app_request_bytes_total' )
         metric.setDescription( 'Total number of bytes in API request' )
         metric.setType( MetricType.COUNTER )
         metric.setLabels( None )

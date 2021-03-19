@@ -34,7 +34,7 @@ class MosquittoConsumer(object):
             metric.setName( 'mosquitto_version' )
             metric.setDescription( 'The version of the Mosquitto Broker' )
             metric.setType( MetricType.GAUGE )
-            labels = [ ("version", StringUtil.clean( message.payload )) ]
+            labels = [ ('version', StringUtil.clean( message.payload )[20:-1]) ]
             metric.setLabels( labels )
             metric.setValue( 1.0 )
             Monitor.getInstance().save( metric )
