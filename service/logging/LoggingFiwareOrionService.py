@@ -15,26 +15,34 @@ class LoggingFiwareOrionService(object):
         classpath = 'service.FiwareOrionService.read'
         parameters = StringUtil.clean({ 'request' : StringUtil.clean( request ) })
         Logger.debug( classpath + '  ' + parameters )
-        self.__fiwareOrionService.read( request )
+        result = self.__fiwareOrionService.read( request )
+
+        return result
 
 
     def create(self, request):
         classpath = 'service.FiwareOrionService.create'
         parameters = StringUtil.clean({ 'request' : StringUtil.clean( request ) })
         Logger.debug( classpath + '  ' + parameters )
-        self.__fiwareOrionService.create( request )
+        result = self.__fiwareOrionService.create( request )
+
+        return result
 
     
     def update(self, request):
         classpath = 'service.FiwareOrionService.update'
         parameters = StringUtil.clean({ 'request' : StringUtil.clean( request ) })
         Logger.debug( classpath + '  ' + parameters )
-        self.__fiwareOrionService.update( request )
+        result = self.__fiwareOrionService.update( request )
+
+        return result
 
     
     def delete(self, request):
         classpath = 'service.FiwareOrionService.delete'
         parameters = StringUtil.clean({ 'request' : StringUtil.clean( request ) })
         Logger.debug( classpath + '  ' + parameters )
-        self.__fiwareOrionService.delete( request )
+        result = self.__fiwareOrionService.delete( request )
+
+        return result
     

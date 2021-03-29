@@ -23,8 +23,10 @@ class ExceptionHandlingMosquittoConsumer(object):
 
 
     def onConnect(self, message):
+        result = None
+
         try:
-            self.__mosquittoConsumser.onConnect( message )
+            result = self.__mosquittoConsumser.onConnect( message )
         
         except Exception as exception:
             classpath = 'consumer.MosquittoConsumer.onConnect'
@@ -33,10 +35,14 @@ class ExceptionHandlingMosquittoConsumer(object):
             message = classpath + '  ' + parameters  + '  ' + exceptionMessage
             Logger.error( message )
 
+        return result
+
 
     def onMessage(self, message):
+        result = None
+
         try:
-            self.__mosquittoConsumser.onMessage( message )
+            Result = self.__mosquittoConsumser.onMessage( message )
         
         except Exception as exception:
             classpath = 'consumer.RequestConsumer.onMessage'
@@ -45,6 +51,7 @@ class ExceptionHandlingMosquittoConsumer(object):
             message = classpath + '  ' + parameters  + '  ' + exceptionMessage
             Logger.error( message )
 
+        return result
         
     def consume(self):
         properties = ConfigurationDAO( 'Mosquitto' )

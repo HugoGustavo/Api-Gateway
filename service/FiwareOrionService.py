@@ -16,19 +16,27 @@ class FiwareOrionService(object):
 
     def read(self, request):
         response = self.__fiwareOrionProxy.read( request )
-        self.__responseProducer.produce( response ) 
+        result = self.__responseProducer.produce( response ) 
+        
+        return result
 
 
     def create(self, request):
         response = self.__fiwareOrionProxy.create( request )
-        self.__responseProducer.produce( response ) 
+        result = self.__responseProducer.produce( response ) 
+        
+        return result
 
 
     def update(self, request):
         response = self.__fiwareOrionProxy.update( request )
-        self.__responseProducer.produce( response ) 
+        result = self.__responseProducer.produce( response )
+
+        return result
 
 
     def delete(self, request):
         response = self.__fiwareOrionProxy.delete( request )
-        self.__responseProducer.produce( response ) 
+        result = self.__responseProducer.produce( response )
+
+        return result

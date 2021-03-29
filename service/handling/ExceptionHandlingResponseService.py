@@ -14,8 +14,9 @@ class ExceptionHandlingResponseService(object):
 
     
     def route(self, response):
+        result = None
         try:
-            self.__responseService.route( response )
+            result = self.__responseService.route( response )
         
         except Exception as exception:
             classpath = 'service.ResponseService.route'
@@ -32,3 +33,5 @@ class ExceptionHandlingResponseService(object):
             metric.setLabels( None )
             metric.setValue( metric.getValue() + 1)
             Monitor.getInstance().save( metric )
+    
+        return result

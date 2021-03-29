@@ -17,6 +17,6 @@ class ResponseService(object):
         response.setReplyHost( request.getReplyHost() )
         response.setReplyPort( request.getReplyPort() )
         response.setReplyChannel( request.getReplyChannel() )
-        response.setReplyProtocol( request.setReplyProtocol() )
+        response.setReplyProtocol( request.getReplyProtocol() )
         
         self.__iotService.route( response )

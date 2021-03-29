@@ -16,5 +16,7 @@ class MonitoringResponseProducer(object):
 
     def produce(self, response):
         response.setArriveTime( time.time() )
-        self.__responseProducer.produce( response )
+        result = self.__responseProducer.produce( response )
+
+        return result
 

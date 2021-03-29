@@ -23,8 +23,10 @@ class ExceptionHandlingResponseConsumer(object):
 
 
     def onConnect(self, message):
+        result = None
+
         try:
-            self.__responseConsumer.onConnect( message )
+            result = self.__responseConsumer.onConnect( message )
         
         except Exception as exception:
             classpath = 'consumer.responseConsumer.onConnect'
@@ -40,11 +42,15 @@ class ExceptionHandlingResponseConsumer(object):
             metric.setType( MetricType.COUNTER )
             metric.setLabels( None )
             metric.setValue( metric.getValue() + 1 )
-            Monitor.getInstance().save( metric )   
+            Monitor.getInstance().save( metric ) 
+
+        return result  
     
     def onMessage(self, message):
+        result = None
+
         try:
-            self.__responseConsumer.onMessage( message )
+            result = self.__responseConsumer.onMessage( message )
         
         except Exception as exception:
             classpath = 'consumer.responseConsumer.onMessage'
@@ -61,6 +67,8 @@ class ExceptionHandlingResponseConsumer(object):
             metric.setLabels( None )
             metric.setValue( metric.getValue() + 1 )
             Monitor.getInstance().save( metric )
+        
+        return result
       
 
     def consume(self):

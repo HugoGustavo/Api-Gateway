@@ -18,11 +18,15 @@ class MonitoringCoatiConsumer(object):
 
 
     def onConnect(self, message):
-        self.__coatiConsumer.onConnect( message )
+        result = self.__coatiConsumer.onConnect( message )
+
+        return result
 
 
     def onMessage(self, message):
-        self.__coatiConsumer.onMessage( message )
+        result = self.__coatiConsumer.onMessage( message )
+        
+        return result
 
         
     def consume(self):

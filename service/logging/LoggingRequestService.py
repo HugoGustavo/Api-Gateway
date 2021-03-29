@@ -16,6 +16,7 @@ class LoggingRequestService(object):
         parameters = StringUtil.clean({ 'request' : StringUtil.clean( request ) })
         Logger.debug( classpath + '  ' + parameters )
         result = self.__requestService.save( request )
+        
         return result
 
 
@@ -24,6 +25,7 @@ class LoggingRequestService(object):
         parameters = StringUtil.clean({ 'id' : StringUtil.clean( id ) })
         Logger.debug( classpath + '  ' + parameters )
         result = self.__requestService.findById( id )
+        
         return result 
 
 
@@ -31,5 +33,7 @@ class LoggingRequestService(object):
         classpath = 'service.RequestService.route'
         parameters = StringUtil.clean({ 'request' : StringUtil.clean( request ) })
         Logger.debug( classpath + '  ' + parameters )
-        self.__requestService.route( request )
+        result = self.__requestService.route( request )
+
+        return result
     

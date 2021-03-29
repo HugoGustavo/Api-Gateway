@@ -16,14 +16,18 @@ class MonitoringRequestService(object):
 
     def save(self, request):
         result = self.__requestService.save( request )
+        
         return result
 
 
     def findById(self, id):
         result = self.__requestService.findById( id ) 
+        
         return result
 
 
     def route(self, request):
-        self.__requestService.route( request )
+        result = self.__requestService.route( request )
+
+        return result
     

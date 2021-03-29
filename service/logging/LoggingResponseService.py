@@ -15,6 +15,8 @@ class LoggingResponseService(object):
         classpath = 'service.ResponseService.route'
         parameters = StringUtil.clean({ 'response' : StringUtil.clean( response ) })
         Logger.debug( classpath + '  ' + parameters )
-        self.__responseService.route( response )
+        result = self.__responseService.route( response )
+
+        return result
 
 

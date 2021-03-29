@@ -15,7 +15,9 @@ class LoggingRequestRepository(object):
         classpath = 'repository.RequestRepository.connect'
         parameters = ''
         Logger.debug( classpath + '  ' + parameters )
-        self.__repository.connect()
+        result = self.__repository.connect()
+        
+        return result
 
     
     def isConnected(self):
@@ -23,6 +25,7 @@ class LoggingRequestRepository(object):
         parameters = ''
         Logger.debug( classpath + '  ' + parameters )
         result = self.__repository.isConnected()
+        
         return result
 
 
@@ -30,14 +33,18 @@ class LoggingRequestRepository(object):
         classpath = 'repository.RequestRepository.disconnect'
         parameters = ''
         Logger.debug( classpath + '  ' + parameters )
-        self.__repository.disconnect()
+        result = self.__repository.disconnect()
+        
+        return result
 
 
     def commit(self):
         classpath = 'repository.RequestRepository.commit'
         parameters = ''
         Logger.debug( classpath + '  ' + parameters )
-        self.__repository.commit()
+        result = self.__repository.commit()
+
+        return result
 
 
     def save(self, request):

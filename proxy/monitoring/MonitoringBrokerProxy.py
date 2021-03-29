@@ -11,20 +11,30 @@ class MonitoringBrokerProxy(object):
 
 
     def over(self, protocol):
-        self.__brokerProxy.over( protocol )
+        result = self.__brokerProxy.over( protocol )
+
+        return result
 
     
     def connect(self, host, port, keepAlive, onConnect=None):
-        self.__brokerProxy.connect( host, port, keepAlive, onConnect )
+        result = self.__brokerProxy.connect( host, port, keepAlive, onConnect )
+        
+        return result
 
 
     def publish(self, topic, payload):
-        self.__brokerProxy.publish( topic, payload )
+        result = self.__brokerProxy.publish( topic, payload )
+
+        return result
 
     
     def subscribe(self, topic, onMessage):
-        self.__brokerProxy.subscribe( topic, onMessage )
+        result = self.__brokerProxy.subscribe( topic, onMessage )
+
+        return result
 
     
     def consume(self):
-        self.__brokerProxy.consume()
+        result = self.__brokerProxy.consume()
+        
+        return result

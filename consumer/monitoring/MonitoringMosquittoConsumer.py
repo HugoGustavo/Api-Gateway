@@ -18,11 +18,15 @@ class MonitoringMosquittoConsumer(object):
 
 
     def onConnect(self, message):
-        self.__mosquittoConsumser.onConnect( message )
+        result = self.__mosquittoConsumser.onConnect( message )
+
+        return result
 
 
     def onMessage(self, message):
-        self.__mosquittoConsumser.onMessage( message )
+        result = self.__mosquittoConsumser.onMessage( message )
+
+        return result
 
         
     def consume(self):

@@ -29,8 +29,8 @@ class ResponseConsumer(object):
         response.setReplyHost( StringUtil.clean(response_json['replyHost']) )
         response.setReplyPort( StringUtil.toInt(response_json['replyPort']) )
         response.setReplyChannel( StringUtil.clean(response_json['replyChannel']) )
-        response.setReplyProtocol( Protocol[ StringUtil.clean(request_json['replyProtocol']).upper() ] )
-        response.setOverProtocol( Protocol[ StringUtil.clean(message.getProtocol()).upper() ] )
+        response.setReplyProtocol( Protocol(StringUtil.clean(response_json['replyProtocol'])) )
+        response.setOverProtocol( Protocol[StringUtil.clean(message.getProtocol()).upper()] )
         response.setVersionProtocol( StringUtil.clean(response_json['versionProtocol']) )
         response.setStatusCode( response_json['statusCode'] )
         response.setStatusMessage( StringUtil.clean(response_json['statusMessage']) )
@@ -39,7 +39,7 @@ class ResponseConsumer(object):
         response.setArriveTime( StringUtil.toFloat(response_json.get('arriveTime', None)) )
         response.setDepartureTime( None )
 
-        self.__requestService.route(request)
+        self.__responseService.route(response)
 
     
     def consume(self):

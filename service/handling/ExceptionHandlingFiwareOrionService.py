@@ -18,8 +18,9 @@ class ExceptionHandlingFiwareOrionService(object):
 
     
     def read(self, request):
+        result = None
         try:
-            self.__fiwareOrionService.read( request )
+            result = self.__fiwareOrionService.read( request )
         
         except Exception as exception:
             classpath = 'service.FiwareOrionService.read'
@@ -36,11 +37,14 @@ class ExceptionHandlingFiwareOrionService(object):
             metric.setLabels( None )
             metric.setValue( metric.getValue() + 1 )
             Monitor.getInstance().save( metric )
+        
+        return result
 
     
     def create(self, request):
+        result = None
         try:
-            self.__fiwareOrionService.create( request )
+            result = self.__fiwareOrionService.create( request )
         
         except Exception as exception:
             classpath = 'service.FiwareOrionService.create'
@@ -57,11 +61,14 @@ class ExceptionHandlingFiwareOrionService(object):
             metric.setLabels( None )
             metric.setValue( metric.getValue() + 1 )
             Monitor.getInstance().save( metric )
+        
+        return result
 
 
     def update(self, request):
+        result = None
         try:
-            self.__fiwareOrionService.update( request )
+            result = self.__fiwareOrionService.update( request )
         
         except Exception as exception:
             classpath = 'service.FiwareOrionService.update'
@@ -78,11 +85,14 @@ class ExceptionHandlingFiwareOrionService(object):
             metric.setLabels( None )
             metric.setValue( metric.getValue() + 1 )
             Monitor.getInstance().save( metric )
+        
+        return result
 
     
     def delete(self, request):
+        result = None
         try:
-            self.__fiwareOrionService.delete( request )
+            result = self.__fiwareOrionService.delete( request )
         
         except Exception as exception:
             classpath = 'service.FiwareOrionService.delete'
@@ -99,4 +109,5 @@ class ExceptionHandlingFiwareOrionService(object):
             metric.setLabels( None )
             metric.setValue( metric.getValue() + 1 )
             Monitor.getInstance().save( metric )
-
+        
+        return result

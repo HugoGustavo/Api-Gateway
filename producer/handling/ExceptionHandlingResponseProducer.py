@@ -1,7 +1,10 @@
 import paho.mqtt.client as mqtt
 
 from util.Logger import Logger
+from util.Monitor import Metric
+from util.Monitor import Monitor
 from util.JsonUtil import JsonUtil
+from util.Monitor import MetricType
 from util.StringUtil import StringUtil
 from model.dao.ConfigurationDAO import ConfigurationDAO
 
@@ -11,8 +14,10 @@ class ExceptionHandlingResponseProducer(object):
 
 
     def produce(self, response):
+        result = None
+
         try:
-            self.__responseProducer.produce( response )
+            result = self.__responseProducer.produce( response )
         
         except Exception as exception:
             classpath = 'producer.ResponseProducer.produce'
@@ -28,3 +33,5 @@ class ExceptionHandlingResponseProducer(object):
             metric.setType( MetricType.COUNTER )
             metric.setValue( metric.getValue() + 1 )
             Monitor.getInstance().save( metric )
+        
+        return result

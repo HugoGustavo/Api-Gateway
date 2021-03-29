@@ -28,7 +28,7 @@ class MonitoringFiwareOrionProxy(object):
 
         startUploadDownload = psutil.net_io_counters(pernic=True)
         start = time.time()
-        self.__fiwareOrionProxy.read(request)
+        result = self.__fiwareOrionProxy.read( request )
         end = time.time()
         endUploadDownload = psutil.net_io_counters(pernic=True)
 
@@ -73,6 +73,8 @@ class MonitoringFiwareOrionProxy(object):
         metric.setValue( metric.getValue() + 1)
         Monitor.getInstance().save( metric )
 
+        return result
+
 
     def create(self, request):
         request.setDepartureTime( time.time() )
@@ -89,7 +91,7 @@ class MonitoringFiwareOrionProxy(object):
 
         startUploadDownload = psutil.net_io_counters(pernic=True)
         start = time.time()
-        self.__fiwareOrionProxy.create(request)
+        result = self.__fiwareOrionProxy.create( request )
         end = time.time()
         endUploadDownload = psutil.net_io_counters(pernic=True)
 
@@ -115,7 +117,6 @@ class MonitoringFiwareOrionProxy(object):
         metric.setValue( 1.0 )
         Monitor.getInstance().save( metric )
 
-
         metric = Monitor.getInstance().findByName( 'app_http_post_fiware_orion_seconds_total' )
         metric = Metric() if metric == None else metric
         metric.setName( 'app_http_post_fiware_orion_seconds_total' )
@@ -134,6 +135,8 @@ class MonitoringFiwareOrionProxy(object):
         metric.setLabels( None )
         metric.setValue( metric.getValue() + 1)
         Monitor.getInstance().save( metric )
+
+        return result
     
     def update(self, request):
         request.setDepartureTime(time.time())
@@ -150,7 +153,7 @@ class MonitoringFiwareOrionProxy(object):
 
         startUploadDownload = psutil.net_io_counters(pernic=True)
         start = time.time()
-        self.__fiwareOrionProxy.update(request)
+        result = self.__fiwareOrionProxy.update( request )
         end = time.time()
         endUploadDownload = psutil.net_io_counters(pernic=True)
 
@@ -194,6 +197,8 @@ class MonitoringFiwareOrionProxy(object):
         metric.setValue( metric.getValue() + 1)
         Monitor.getInstance().save( metric )
 
+        return result
+
 
     def delete(self, request):
         request.setDepartureTime( time.time() )
@@ -210,7 +215,7 @@ class MonitoringFiwareOrionProxy(object):
 
         startUploadDownload = psutil.net_io_counters(pernic=True)
         start = time.time()
-        self.__fiwareOrionProxy.delete(request)
+        result = self.__fiwareOrionProxy.delete( request )
         end = time.time()
         endUploadDownload = psutil.net_io_counters(pernic=True)
 
@@ -254,3 +259,5 @@ class MonitoringFiwareOrionProxy(object):
         metric.setLabels( None )
         metric.setValue( metric.getValue() + 1)
         Monitor.getInstance().save( metric )
+
+        return result

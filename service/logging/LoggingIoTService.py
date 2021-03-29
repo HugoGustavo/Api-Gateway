@@ -15,5 +15,7 @@ class LoggingIoTService(object):
         classpath = 'service.IoTService.route'
         parameters = StringUtil.clean({ 'response' : StringUtil.clean( response ) })
         Logger.debug( classpath + '  ' + parameters )
-        self.__iotService.route( response )
+        result = self.__iotService.route( response )
+
+        return result
 

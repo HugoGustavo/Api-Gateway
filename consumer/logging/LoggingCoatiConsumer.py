@@ -27,7 +27,9 @@ class LoggingCoatiConsumer(object):
         parameters = StringUtil.clean({ 'message' : StringUtil.clean( message ) })
         Logger.debug( classpath + '  ' + parameters )
 
-        self.__coatiConsumer.onConnect( message )
+        result = self.__coatiConsumer.onConnect( message )
+
+        return result
 
 
     def onMessage(self, message):
@@ -35,7 +37,9 @@ class LoggingCoatiConsumer(object):
         parameters = StringUtil.clean({ 'message' : StringUtil.clean( message ) })
         Logger.debug( classpath + '  ' + parameters )
 
-        self.__coatiConsumer.onMessage( message )
+        result = self.__coatiConsumer.onMessage( message )
+        
+        return result
 
     
     def consume(self):

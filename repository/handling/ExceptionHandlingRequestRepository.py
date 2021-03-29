@@ -12,8 +12,9 @@ class ExceptionHandlingRequestRepository(object):
 
 
     def connect(self):
+        result = None
         try:
-            self.__requestRepository.connect()
+            result = self.__requestRepository.connect()
         
         except Exception as exception:
             classpath = 'repository.RequestRepository.connect'
@@ -29,12 +30,14 @@ class ExceptionHandlingRequestRepository(object):
             metric.setType( MetricType.COUNTER )
             metric.setValue( metric.getValue() + 1 )
             Monitor.getInstance().save( metric )
+        
+        return result
 
     
     def isConnected(self):
+        result = None
         try:
             result = self.__requestRepository.isConnected()
-            return result
         
         except Exception as exception:
             classpath = 'repository.RequestRepository.isConnected'
@@ -50,11 +53,14 @@ class ExceptionHandlingRequestRepository(object):
             metric.setType( MetricType.COUNTER )
             metric.setValue( metric.getValue() + 1 )
             Monitor.getInstance().save( metric )
+        
+        return result
 
 
     def disconnect(self):
+        result = None
         try:
-            self.__requestRepository.disconnect()
+            result = self.__requestRepository.disconnect()
         
         except Exception as exception:
             classpath = 'repository.RequestRepository.disconnect'
@@ -71,10 +77,13 @@ class ExceptionHandlingRequestRepository(object):
             metric.setValue( metric.getValue() + 1 )
             Monitor.getInstance().save( metric )
 
+        return result
+
 
     def commit(self):
+        result = None
         try:
-            self.__requestRepository.commit()
+            result = self.__requestRepository.commit()
         
         except Exception as exception:
             classpath = 'repository.RequestRepository.commit'
@@ -90,12 +99,14 @@ class ExceptionHandlingRequestRepository(object):
             metric.setType( MetricType.COUNTER )
             metric.setValue( metric.getValue() + 1 )
             Monitor.getInstance().save( metric )
+        
+        return result
 
 
     def save(self, request):
+        result = None
         try:
             result = self.__requestRepository.save(request)
-            return result
         
         except Exception as exception:
             classpath = 'repository.RequestRepository.save'
@@ -112,11 +123,12 @@ class ExceptionHandlingRequestRepository(object):
             metric.setValue( metric.getValue() + 1 )
             Monitor.getInstance().save( metric )
 
+        return result
 
     def findById(self, id):
+        result = None
         try:
             result = self.__requestRepository.findById(id)
-            return result
         
         except Exception as exception:
             classpath = 'repository.RequestRepository.findById'
@@ -132,4 +144,6 @@ class ExceptionHandlingRequestRepository(object):
             metric.setType( MetricType.COUNTER)
             metric.setValue( metric.getValue() + 1)
             Monitor.getInstance().save( metric )
+        
+        return result
 

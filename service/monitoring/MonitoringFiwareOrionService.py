@@ -17,16 +17,24 @@ class MonitoringFiwareOrionService(object):
 
 
     def read(self, request):
-        self.__fiwareOrionService.read(request)
+        result = self.__fiwareOrionService.read( request )
+
+        return result
 
 
     def create(self, request):
-        self.__fiwareOrionService.create(request)
+        result = self.__fiwareOrionService.create( request )
+
+        return result
 
     
     def update(self, request):
-        self.__fiwareOrionService.update(request)
+        result = self.__fiwareOrionService.update( request )
+
+        return result
 
 
     def delete(self, request):
-        self.__fiwareOrionService.delete(request)
+        result = self.__fiwareOrionService.delete( request )
+        
+        return result

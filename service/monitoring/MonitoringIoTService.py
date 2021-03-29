@@ -26,5 +26,7 @@ class MonitoringIoTService(object):
         metric.setValue( metric.getValue() + value )
         Monitor.getInstance().save( metric )
 
-        self.__iotService.route( response )
+        result = self.__iotService.route( response )
+
+        return result
 

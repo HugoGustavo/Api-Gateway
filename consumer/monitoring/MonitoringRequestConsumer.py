@@ -19,7 +19,9 @@ class MonitoringRequestConsumer(object):
 
 
     def onConnect(self, message):
-        self.__requestConsumer.onConnect( message )    
+        result = self.__requestConsumer.onConnect( message )
+
+        return result
 
     
     def onMessage(self, message):
@@ -46,7 +48,7 @@ class MonitoringRequestConsumer(object):
         metric.setValue( metric.getValue() + value )
         Monitor.getInstance().save( metric )
         
-        self.__requestConsumer.onMessage( message )
+        result = self.__requestConsumer.onMessage( message )
 
         metric = Monitor.getInstance().findByName( 'app_request_success_total' )
         metric = Metric() if metric == None else metric
@@ -56,6 +58,8 @@ class MonitoringRequestConsumer(object):
         metric.setLabels( None )
         metric.setValue( metric.getValue() + 1 )
         Monitor.getInstance().save( metric )
+
+        return result
 
 
     def consume(self):

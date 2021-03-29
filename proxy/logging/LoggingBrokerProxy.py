@@ -15,32 +15,42 @@ class LoggingBrokerProxy(object):
         classpath = 'proxy.BrokerProxy.over'
         parameters = StringUtil.clean({ 'protocol' : StringUtil.clean( protocol ) })
         Logger.debug( classpath + '  ' + parameters )
-        self.__brokerProxy.over( protocol )
+        result =  self.__brokerProxy.over( protocol )
+
+        return result
 
     
     def connect(self, host, port, keepAlive, onConnect=None):
         classpath = 'proxy.BrokerProxy.connect'
         parameters = StringUtil.clean({ 'host' : StringUtil.clean( host ), 'port' : StringUtil.clean( port ), 'keepAlive' : StringUtil.clean( keepAlive ), 'onConnect' : StringUtil.clean( onConnect ) })
         Logger.debug( classpath + '  ' + parameters )
-        self.__brokerProxy.connect( host, port, keepAlive, onConnect )
+        result = self.__brokerProxy.connect( host, port, keepAlive, onConnect )
+        
+        return result
 
 
     def publish(self, topic, payload):
         classpath = 'proxy.BrokerProxy.publish'
         parameters = StringUtil.clean({ 'topic' : StringUtil.clean( topic ), 'payload' : StringUtil.clean( payload ) })
         Logger.debug( classpath + '  ' + parameters )
-        self.__brokerProxy.publish( topic, payload )
+        result = self.__brokerProxy.publish( topic, payload )
+        
+        return result
 
     
     def subscribe(self, topic, onMessage):
         classpath = 'proxy.BrokerProxy.subscribe'
         parameters = StringUtil.clean({ 'topic' : StringUtil.clean( topic ), 'onMessage' : StringUtil.clean( onMessage ) })
         Logger.debug( classpath + '  ' + parameters )
-        self.__brokerProxy.subscribe( topic, onMessage )
+        result = self.__brokerProxy.subscribe( topic, onMessage )
+
+        return result
 
     
     def consume(self):
         classpath = 'proxy.BrokerProxy.consume'
         parameters = StringUtil.getNoneAsEmpty( None )
         Logger.debug( classpath + '  ' + parameters )
-        self.__brokerProxy.consume()
+        result = self.__brokerProxy.consume()
+
+        return result

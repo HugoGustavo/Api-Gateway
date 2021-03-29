@@ -14,8 +14,9 @@ class ExceptionHandlingIoTService(object):
 
 
     def route(self, response):
+        result = None
         try:
-            self.__iotService.route( response )
+            result = self.__iotService.route( response )
         
         except Exception as exception:
             classpath = 'service.IoTService.route'
@@ -33,3 +34,4 @@ class ExceptionHandlingIoTService(object):
             metric.setValue( metric.getValue() + 1 )
             Monitor.getInstance().save( metric )
 
+        return result

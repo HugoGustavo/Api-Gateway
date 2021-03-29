@@ -16,26 +16,34 @@ class LoggingFiwareOrionProxy(object):
         classpath = 'proxy.FiwareOrionProxy.read'
         parameters = StringUtil.clean({ 'request' : StringUtil.clean( request ) })
         Logger.debug( classpath + '  ' + parameters )
-        self.__fiwareOrionProxy.read( request )
+        result = self.__fiwareOrionProxy.read( request )
+        
+        return result
 
 
     def create(self, request):
         classpath = 'proxy.FiwareOrionProxy.create'
         parameters = StringUtil.clean({ 'request' : StringUtil.clean( request ) })
         Logger.debug( classpath + '  ' + parameters )
-        self.__fiwareOrionProxy.create( request )
+        result = self.__fiwareOrionProxy.create( request )
+        
+        return result
 
     
     def update(self, request):
         classpath = 'proxy.FiwareOrionProxy.update'
         parameters = StringUtil.clean({ 'request' : StringUtil.clean( request ) })
         Logger.debug( classpath + '  ' + parameters )
-        self.__fiwareOrionProxy.update( request )
+        result = self.__fiwareOrionProxy.update( request )
+        
+        return result
 
     
     def delete(self, request):
         classpath = 'proxy.FiwareOrionProxy.delete'
         parameters = StringUtil.clean({ 'request' : StringUtil.clean( request ) })
         Logger.debug( classpath + '  ' + parameters )
-        self.__fiwareOrionProxy.delete( request )
+        result = self.__fiwareOrionProxy.delete( request )
+        
+        return result
     

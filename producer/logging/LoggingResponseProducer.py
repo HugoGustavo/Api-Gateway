@@ -12,5 +12,7 @@ class LoggingResponseProducer(object):
         classpath = 'producer.ResponseProducer.produce'
         parameters = StringUtil.clean({ 'request' : StringUtil.clean( request ) })
         Logger.debug( classpath + '  ' + parameters )
-        self.__responseProducer.produce( request )
+        result = self.__responseProducer.produce( request )
+
+        return result
 

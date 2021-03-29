@@ -23,8 +23,10 @@ class ExceptionHandlingRequestConsumer(object):
 
 
     def onConnect(self, message):
+        result = None
+
         try:
-            self.__requestConsumer.onConnect( message )
+            result = self.__requestConsumer.onConnect( message )
         
         except Exception as exception:
             classpath = 'consumer.RequestConsumer.onConnect'
@@ -41,11 +43,15 @@ class ExceptionHandlingRequestConsumer(object):
             metric.setLabels( None )
             metric.setValue( metric.getValue() + 1 )
             Monitor.getInstance().save( metric )
+        
+        return result
     
 
     def onMessage(self, message):
+        result = None
+        
         try:
-            self.__requestConsumer.onMessage( message )
+            result = self.__requestConsumer.onMessage( message )
         
         except Exception as exception:
             classpath = 'consumer.RequestConsumer.onMessage'
@@ -62,6 +68,8 @@ class ExceptionHandlingRequestConsumer(object):
             metric.setLabels( None )
             metric.setValue( metric.getValue() + 1 )
             Monitor.getInstance().save( metric )
+        
+        return result
 
     
     def consume(self):

@@ -25,14 +25,18 @@ class LoggingResponseConsumer(object):
         classpath = 'consumer.ResponseConsumer.onConnect'
         parameters = StringUtil.clean({ 'message' : StringUtil.clean( message ) })
         Logger.debug( classpath + '  ' + parameters )
-        self.__responseConsumer.onConnect( message )
+        result = self.__responseConsumer.onConnect( message )
+        
+        return result
 
 
     def onMessage(self, message):
         classpath = 'consumer.ResponseConsumer.onMessage'
         parameters = StringUtil.clean({ 'message' : StringUtil.clean( message ) })
         Logger.debug( classpath + '  ' + parameters )
-        self.__responseConsumer.onMessage( message )
+        result = self.__responseConsumer.onMessage( message )
+
+        return result
 
    
     def consume(self):

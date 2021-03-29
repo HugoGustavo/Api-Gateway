@@ -14,8 +14,9 @@ class ExceptionHandlingBrokerProxy(object):
 
     
     def over(self, protocol):
+        result = None
         try:
-            self.__brokerProxy.over( protocol )
+            result = self.__brokerProxy.over( protocol )
         
         except Exception as exception:
             classpath = 'proxy.BrokerProxy.over'
@@ -24,10 +25,13 @@ class ExceptionHandlingBrokerProxy(object):
             message = classpath + '  ' + parameters  + '  ' + exceptionMessage
             Logger.error( message )
 
-
+        return result
+    
+    
     def connect(self, host, port, keepAlive, onConnect=None):
+        result = None
         try:
-            self.__brokerProxy.connect( host, port, keepAlive, onConnect )
+            result = self.__brokerProxy.connect( host, port, keepAlive, onConnect )
         
         except Exception as exception:
             classpath = 'proxy.BrokerProxy.connect'
@@ -35,11 +39,14 @@ class ExceptionHandlingBrokerProxy(object):
             exceptionMessage = StringUtil.clean( exception )
             message = classpath + '  ' + parameters  + '  ' + exceptionMessage
             Logger.error( message )
+        
+        return result
 
     
     def publish(self, topic, payload):
+        result = None
         try:
-            self.__brokerProxy.update( topic, payload )
+            result = self.__brokerProxy.publish( topic, payload )
         
         except Exception as exception:
             classpath = 'proxy.BrokerProxy.publish'
@@ -47,11 +54,14 @@ class ExceptionHandlingBrokerProxy(object):
             exceptionMessage = StringUtil.clean( exception )
             message = classpath + '  ' + parameters  + '  ' + exceptionMessage
             Logger.error( message )
+        
+        return result
 
     
     def subscribe(self, topic, onMessage):
+        result = None
         try:
-            self.__brokerProxy.subscribe( topic, onMessage )
+            result = self.__brokerProxy.subscribe( topic, onMessage )
         
         except Exception as exception:
             classpath = 'proxy.BrokerProxy.subscribe'
@@ -59,11 +69,14 @@ class ExceptionHandlingBrokerProxy(object):
             exceptionMessage = StringUtil.clean( exception )
             message = classpath + '  ' + parameters  + '  ' + exceptionMessage
             Logger.error( message )
+        
+        return result
 
 
     def consume(self):
+        result = None
         try:
-            self.__brokerProxy.consume()
+            result = self.__brokerProxy.consume()
         
         except Exception as exception:
             classpath = 'proxy.BrokerProxy.consume'
@@ -71,4 +84,6 @@ class ExceptionHandlingBrokerProxy(object):
             exceptionMessage = StringUtil.clean( exception )
             message = classpath + '  ' + parameters  + '  ' + exceptionMessage
             Logger.error( message )
+        
+        return result
 

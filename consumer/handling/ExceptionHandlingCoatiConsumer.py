@@ -23,20 +23,26 @@ class ExceptionHandlingCoatiConsumer(object):
 
 
     def onConnect(self, message):
-        try:
-            self.__coatiConsumer.onConnect( message )
+        result = None
         
+        try:
+            result = self.__coatiConsumer.onConnect( message )
+            
         except Exception as exception:
             classpath = 'consumer.CoatiConsumer.onConnect'
             parameters = StringUtil.clean({ 'message' : StringUtil.clean( message ) })
             exceptionMessage = StringUtil.clean( exception )
             message = classpath + '  ' + parameters  + '  ' + exceptionMessage
             Logger.error( message )
+        
+        return result
 
 
     def onMessage(self, message):
+        result = None
+        
         try:
-            self.__coatiConsumer.onMessage( message )
+            result = self.__coatiConsumer.onMessage( message )
         
         except Exception as exception:
             classpath = 'consumer.RequestConsumer.onMessage'
@@ -45,6 +51,7 @@ class ExceptionHandlingCoatiConsumer(object):
             message = classpath + '  ' + parameters  + '  ' + exceptionMessage
             Logger.error( message )
 
+        return result
         
     def consume(self):
         properties = ConfigurationDAO( 'Coati' )

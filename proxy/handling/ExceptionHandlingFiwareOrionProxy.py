@@ -14,8 +14,9 @@ class ExceptionHandlingFiwareOrionProxy(object):
 
     
     def read(self, request):
+        result = None
         try:
-            self.__fiwareOrionProxy.read( request )
+            result = self.__fiwareOrionProxy.read( request )
         
         except Exception as exception:
             classpath = 'proxy.FiwareOrionProxy.read'
@@ -32,11 +33,15 @@ class ExceptionHandlingFiwareOrionProxy(object):
             metric.setLabels( None )
             metric.setValue( metric.getValue() + 1 )
             Monitor.getInstance().save( metric )
+    
+        return result
+
 
     
     def create(self, request):
+        result = None
         try:
-            self.__fiwareOrionProxy.create( request )
+            result = self.__fiwareOrionProxy.create( request )
         
         except Exception as exception:
             classpath = 'proxy.FiwareOrionProxy.create'
@@ -53,11 +58,14 @@ class ExceptionHandlingFiwareOrionProxy(object):
             metric.setLabels( None )
             metric.setValue( metric.getValue() + 1 )
             Monitor.getInstance().save( metric )
+        
+        return result
 
 
     def update(self, request):
+        result = None
         try:
-            self.__fiwareOrionProxy.update( request )
+            result = self.__fiwareOrionProxy.update( request )
         
         except Exception as exception:
             classpath = 'proxy.FiwareOrionProxy.update'
@@ -74,11 +82,14 @@ class ExceptionHandlingFiwareOrionProxy(object):
             metric.setLabels( None )
             metric.setValue( metric.getValue() + 1 )
             Monitor.getInstance().save( metric )
+        
+        return result
 
     
     def delete(self, request):
+        result = None
         try:
-            self.__fiwareOrionProxy.delete( request )
+            result = self.__fiwareOrionProxy.delete( request )
         
         except Exception as exception:
             classpath = 'proxy.FiwareOrionProxy.delete'
@@ -95,4 +106,5 @@ class ExceptionHandlingFiwareOrionProxy(object):
             metric.setLabels( None )
             metric.setValue( metric.getValue() + 1 )
             Monitor.getInstance().save( metric )
-
+        
+        return result

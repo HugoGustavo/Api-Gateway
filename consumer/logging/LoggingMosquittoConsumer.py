@@ -27,7 +27,9 @@ class LoggingMosquittoConsumer(object):
         parameters = StringUtil.clean({ 'message' : StringUtil.clean( message ) })
         Logger.debug( classpath + '  ' + parameters )
 
-        self.__mosquittoConsumser.onConnect( message )
+        result = self.__mosquittoConsumser.onConnect( message )
+
+        return result
 
 
     def onMessage(self, message):
@@ -35,7 +37,9 @@ class LoggingMosquittoConsumer(object):
         parameters = StringUtil.clean({ 'message' : StringUtil.clean( message ) })
         Logger.debug( classpath + '  ' + parameters )
 
-        self.__mosquittoConsumser.onMessage( message )
+        result = self.__mosquittoConsumser.onMessage( message )
+
+        return result
 
     
     def consume(self):

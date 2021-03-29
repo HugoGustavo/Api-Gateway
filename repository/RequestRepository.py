@@ -41,7 +41,7 @@ class RequestRepository(object):
         replyHost = StringUtil.clean( request.getReplyHost() ) 
         replyPort = StringUtil.clean( request.getReplyPort() )
         replyChannel = StringUtil.clean( request.getReplyChannel() )
-        replyProtocol = StringUtil.clean( request.getReplyChannel() )
+        replyProtocol = StringUtil.clean( request.getReplyProtocol() )
         parameters = (replyHost, replyPort, replyChannel, replyProtocol)
         cursor.execute(query, parameters)
 
@@ -76,7 +76,7 @@ class RequestRepository(object):
         request.setReplyHost( resultSet[0] )
         request.setReplyPort( resultSet[1] )
         request.setReplyChannel( resultSet[2] )
-        request.setReplyProtocol( Protocol(resultSet[3][8:]) )
+        request.setReplyProtocol( Protocol[resultSet[3][9:]] )
 
         cursor.close()
 

@@ -46,7 +46,7 @@ class MonitoringResponseConsumer(object):
         metric.setValue( metric.getValue() + value )
         Monitor.getInstance().save( metric )
 
-        self.__responseConsumer.onMessage( message )
+        result = self.__responseConsumer.onMessage( message )
         
         metric = Monitor.getInstance().findByName( 'app_response_success_total' )
         metric = Metric() if metric == None else metric
@@ -68,7 +68,9 @@ class MonitoringResponseConsumer(object):
         success = response_json['statusCode'] >= 200 and response_json['statusCode'] <= 299
         value = 1.0 if not success else 0.0
         metric.setValue( metric.getValue() + value )
-        Monitor.getInstance().save( metric )       
+        Monitor.getInstance().save( metric ) 
+
+        return result      
 
     
     def consume(self):

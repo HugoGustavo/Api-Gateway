@@ -1,7 +1,11 @@
 import copy
 import paho.mqtt.client as mqtt
 
+from model.Response import Response
+from model.vo.Protocol import Protocol
 from util.StringUtil import StringUtil
+from util.BrokerClient import MQTTClient
+from util.BrokerClient import COAPClient
 
 class IoTService(object):
     def __init__(self):
@@ -17,8 +21,8 @@ class IoTService(object):
         message = StringUtil.clean( message )
 
         client = MQTTClient() if replyProtocol == Protocol.MQTT else COAPClient()
-        client.connect(replyHost, replyPort)
-        client.publish(replyChannel, message)
+        client.connect( replyHost, replyPort )
+        client.publish( replyChannel, message )
 
 
     def __buildMessage(self, response):

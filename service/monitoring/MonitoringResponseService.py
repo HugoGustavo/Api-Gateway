@@ -13,6 +13,8 @@ class MonitoringResponseService(object):
 
 
     def route(self, response):
-        self.__responseService.route( response )
+        result = self.__responseService.route( response )
+        
+        return result
 
 

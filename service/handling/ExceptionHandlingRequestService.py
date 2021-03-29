@@ -18,9 +18,9 @@ class ExceptionHandlingRequestService(object):
         
     
     def save(self, request):
+        result = None
         try:
             result = self.__requestService.save( request )
-            return result
         
         except Exception as exception:
             classpath = 'service.RequestService.save'
@@ -37,12 +37,14 @@ class ExceptionHandlingRequestService(object):
             metric.setLabels( None )
             metric.setValue( metric.getValue() + 1 )
             Monitor.getInstance().save( metric )
+        
+        return result
     
     
     def findById(self, id):
+        result = None
         try:
             result = self.__requestService.findById( id )
-            return result
         
         except Exception as exception:
             classpath = 'service.RequestService.findById'
@@ -59,11 +61,15 @@ class ExceptionHandlingRequestService(object):
             metric.setLabels( None )
             metric.setValue( metric.getValue() + 1 )
             Monitor.getInstance().save( metric )
+        
+        return result
+
 
     
     def route(self, request):
+        result = None
         try:
-            self.__requestService.route( request )
+            result = self.__requestService.route( request )
         
         except Exception as exception:
             classpath = 'service.RequestService.route'
@@ -80,4 +86,6 @@ class ExceptionHandlingRequestService(object):
             metric.setLabels( None )
             metric.setValue( metric.getValue() + 1 )
             Monitor.getInstance().save( metric )
+        
+        return result
 
