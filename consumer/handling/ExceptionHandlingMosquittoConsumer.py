@@ -8,67 +8,57 @@ from util.Monitor import MetricType
 from util.Monitor import Monitor
 from util.JsonUtil import JsonUtil
 from util.StringUtil import StringUtil
+from model.vo.Protocol import Protocol
 from consumer.monitoring.MonitoringMosquittoConsumer import MonitoringMosquittoConsumer
 from model.dao.ConfigurationDAO import ConfigurationDAO
 
+from proxy.BrokerProxy import BrokerProxy
+from proxy.monitoring.MonitoringBrokerProxy import MonitoringBrokerProxy
+from proxy.logging.LoggingBrokerProxy import LoggingBrokerProxy
+from proxy.handling.ExceptionHandlingBrokerProxy import ExceptionHandlingBrokerProxy
+
 class ExceptionHandlingMosquittoConsumer(object):
     def __init__(self, mosquittoConsumser):
-        self.__properties = ConfigurationDAO( 'MosquittoInformation' )
         self.__mosquittoConsumser = mosquittoConsumser
 
 
-    def onConnect(self, client, userdata, flags, rc):
+    def onConnect(self, message):
         try:
-            self.__mosquittoConsumser.onConnect(client, userdata, flags, rc)
+            self.__mosquittoConsumser.onConnect( message )
         
         except Exception as exception:
             classpath = 'consumer.MosquittoConsumer.onConnect'
-            parameters = StringUtil.clean({ 'client' : StringUtil.clean( client ), 'userdata' : StringUtil.clean( userdata ), 'flags' : StringUtil.clean( flags ), 'rc' : StringUtil.clean( rc ) })
+            parameters = StringUtil.clean({ 'message' : StringUtil.clean( message ) })
             exceptionMessage = StringUtil.clean( exception )
             message = classpath + '  ' + parameters  + '  ' + exceptionMessage
             Logger.error( message )
 
 
-    def onMessage(self, client, userdata, message):
+    def onMessage(self, message):
         try:
-            self.__mosquittoConsumser.onMessage(client, userdata, message)
+            self.__mosquittoConsumser.onMessage( message )
         
         except Exception as exception:
             classpath = 'consumer.RequestConsumer.onMessage'
-            parameters = StringUtil.clean({ 'client' : StringUtil.clean( client ), 'userdata' : StringUtil.clean( userdata ), 'message' : StringUtil.clean( message ) })
+            parameters = StringUtil.clean({ 'message' : StringUtil.clean( message ) })
             exceptionMessage = StringUtil.clean( exception )
             message = classpath + '  ' + parameters  + '  ' + exceptionMessage
             Logger.error( message )
 
-    
-    def onConsume(self):
-        classpath = 'consumer.MosquittoConsumer.onConsume'
-        parameters = StringUtil.getNoneAsEmpty( None )
-        Logger.debug( classpath + '  ' + parameters )
         
-        try:
-            Logger.info("Initializing MQTT Information ...")
-            self.__client = mqtt.Client()
-            self.__client.on_connect = self.onConnect
-            self.__client.on_message = self.onMessage
-
-            broker = StringUtil.clean( self.__properties.get('address.broker') )
-            port = StringUtil.toInt( self.__properties.get('port.broker') )
-            keepAliveBroker = StringUtil.toInt( self.__properties.get('keep.alive.broker') )
-            subscribe = StringUtil.clean( self.__properties.get('topic.subscribe.broker') )
-
-            self.__client.connect(broker, port, keepAliveBroker)
-            self.__client.subscribe( subscribe )
-            self.__client.loop_forever()
-        
-        except Exception as exception:
-            classpath = 'consumer.MosquittoConsumer.onConsume'
-            parameters = StringUtil.getNoneAsEmpty( None )
-            exceptionMessage = StringUtil.clean( exception )
-            message = classpath + '  ' + parameters  + '  ' + exceptionMessage
-            Logger.error( message )
-
-    
     def consume(self):
-        thread = threading.Thread(target = self.onConsume)
-        thread.start() 
+        properties = ConfigurationDAO( 'Mosquitto' )
+        address = StringUtil.clean( properties.get('address.broker') )
+        port = StringUtil.toInt( properties.get('port.broker') )
+        keepAlive = StringUtil.toInt( properties.get('keep.alive.broker') )
+        topic = StringUtil.clean( properties.get('topic.subscribe.broker') )
+
+        self.__brokerProxy = BrokerProxy()
+        self.__brokerProxy = LoggingBrokerProxy( self.__brokerProxy )
+        self.__brokerProxy = MonitoringBrokerProxy( self.__brokerProxy )
+        self.__brokerProxy = ExceptionHandlingBrokerProxy( self.__brokerProxy )
+
+        self.__brokerProxy.over( Protocol.MQTT )
+        self.__brokerProxy.connect( address, port, keepAlive, self.onConnect )
+        self.__brokerProxy.subscribe( topic, self.onMessage )
+        self.__brokerProxy.consume()

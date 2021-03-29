@@ -44,7 +44,8 @@ Abaixo está o formato de envio de uma requisição de enviado pelo Arduino. Os 
     	{
 			"replyHost": "192.168.2.6", 
 			"replyPort": 1883, 
-			"replyChannel": "arduino", 
+			"replyChannel": "arduino",
+            "replyProtocol": "MQTT",
 			"method": "POST", 
 			"uri": "/v2/entities", 
 			"header": {}, 

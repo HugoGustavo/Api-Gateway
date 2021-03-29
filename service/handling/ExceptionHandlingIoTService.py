@@ -8,17 +8,17 @@ from util.JsonUtil import JsonUtil
 from util.Monitor import MetricType
 from util.StringUtil import StringUtil
 
-class ExceptionHandlingArduinoService(object):
-    def __init__(self, arduinoService):
-        self.__arduinoService = arduinoService
+class ExceptionHandlingIoTService(object):
+    def __init__(self, iotService):
+        self.__iotService = iotService
 
 
     def route(self, response):
         try:
-            self.__arduinoService.route( response )
+            self.__iotService.route( response )
         
         except Exception as exception:
-            classpath = 'service.ArduinoService.route'
+            classpath = 'service.IoTService.route'
             parameters = StringUtil.clean({ 'response' : StringUtil.clean( response ) })
             exceptionMessage = StringUtil.clean( exception )
             message = classpath + '  ' + parameters  + '  ' + exceptionMessage

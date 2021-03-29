@@ -3,12 +3,12 @@ from model.Request import Request
 from model.Response import Response
 from util.StringUtil import StringUtil
 from service.RequestService import RequestService
-from service.ArduinoService import ArduinoService
+from service.IoTService import IoTService
 
 class ResponseService(object):
-    def __init__(self, requestService, arduinoService):
+    def __init__(self, requestService, iotService):
         self.__requestService = requestService
-        self.__arduinoService = arduinoService
+        self.__iotService = iotService
 
     
     def route(self, response):
@@ -17,5 +17,6 @@ class ResponseService(object):
         response.setReplyHost( request.getReplyHost() )
         response.setReplyPort( request.getReplyPort() )
         response.setReplyChannel( request.getReplyChannel() )
+        response.setReplyProtocol( request.setReplyProtocol() )
         
-        self.__arduinoService.route( response )
+        self.__iotService.route( response )

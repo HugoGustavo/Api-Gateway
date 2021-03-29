@@ -8,11 +8,11 @@ from util.StringUtil import StringUtil
 from service.ResponseService import ResponseService
 
 class MonitoringResponseService(object):
-    def __init__(self, service):
-        self.__service = service
+    def __init__(self, responseService):
+        self.__responseService = responseService
 
 
     def route(self, response):
-        self.__service.route( response )
+        self.__responseService.route( response )
 
 

@@ -4,16 +4,16 @@ from util.Monitor import Monitor
 from util.JsonUtil import JsonUtil
 from util.Monitor import MetricType
 from util.StringUtil import StringUtil
-from service.ArduinoService import ArduinoService
+from service.IoTService import IoTService
 
-class LoggingArduinoService(object):
-    def __init__(self, service):
-        self.__service = service
+class LoggingIoTService(object):
+    def __init__(self, iotService):
+        self.__iotService = iotService
 
 
     def route(self, response):
-        classpath = 'service.ArduinoService.route'
+        classpath = 'service.IoTService.route'
         parameters = StringUtil.clean({ 'response' : StringUtil.clean( response ) })
         Logger.debug( classpath + '  ' + parameters )
-        self.__service.route( response )
+        self.__iotService.route( response )
 

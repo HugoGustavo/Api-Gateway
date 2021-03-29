@@ -1,6 +1,21 @@
 class ListUtil:
     
     @staticmethod
+    def append(input, value):
+        if input == None: return
+        result = input.copy()
+        result.append(value)
+        return result
+    
+
+    @staticmethod
+    def extend(input, value):
+        if input == None: return
+        result = input.copy()
+        result.extend(value)
+        return result
+    
+    @staticmethod
     def getNoneAsEmpty(input):
         result = [] if input == None else input
         return result
@@ -16,6 +31,11 @@ class ListUtil:
     def isEmpty(input):
         if input == None : return True
         result = input == []
+        return result
+
+    @staticmethod
+    def length(input):
+        result = 0 if input == None else len( input )
         return result
     
     
@@ -35,3 +55,8 @@ class ListUtil:
     def toString(input):
         if input == None: return ''
         return str( input )
+    
+    @staticmethod
+    def of(input, quantity=1):
+        if ( quantity <= 0): return None
+        return [ input ] * quantity

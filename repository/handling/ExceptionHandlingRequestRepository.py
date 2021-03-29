@@ -18,7 +18,7 @@ class ExceptionHandlingRequestRepository(object):
         except Exception as exception:
             classpath = 'repository.RequestRepository.connect'
             parameters = StringUtil.getNoneAsEmpty(None)
-            exceptionMessage = StringUtil.clean(exception)
+            exceptionMessage = StringUtil.clean( exception )
             message = classpath + '  ' + parameters  + '  ' + exceptionMessage
             Logger.error( message )
 
@@ -39,7 +39,7 @@ class ExceptionHandlingRequestRepository(object):
         except Exception as exception:
             classpath = 'repository.RequestRepository.isConnected'
             parameters = StringUtil.getNoneAsEmpty(None)
-            exceptionMessage = StringUtil.clean(exception)
+            exceptionMessage = StringUtil.clean( exception )
             message = classpath + '  ' + parameters  + '  ' + exceptionMessage
             Logger.error( message )
 
@@ -59,7 +59,7 @@ class ExceptionHandlingRequestRepository(object):
         except Exception as exception:
             classpath = 'repository.RequestRepository.disconnect'
             parameters = StringUtil.getNoneAsEmpty(None)
-            exceptionMessage = StringUtil.clean(exception)
+            exceptionMessage = StringUtil.clean( exception )
             message = classpath + '  ' + parameters  + '  ' + exceptionMessage
             Logger.error( message )
 
@@ -79,7 +79,7 @@ class ExceptionHandlingRequestRepository(object):
         except Exception as exception:
             classpath = 'repository.RequestRepository.commit'
             parameters = StringUtil.getNoneAsEmpty(None)
-            exceptionMessage = StringUtil.clean(exception)
+            exceptionMessage = StringUtil.clean( exception )
             message = classpath + '  ' + parameters  + '  ' + exceptionMessage
             Logger.error( message )
 
@@ -100,7 +100,7 @@ class ExceptionHandlingRequestRepository(object):
         except Exception as exception:
             classpath = 'repository.RequestRepository.save'
             parameters = StringUtil.clean({ 'request' : StringUtil.clean(request) })
-            exceptionMessage = StringUtil.clean(exception)
+            exceptionMessage = StringUtil.clean( exception )
             message = classpath + '  ' + parameters  + '  ' + exceptionMessage
             Logger.error( message )
 
@@ -121,7 +121,7 @@ class ExceptionHandlingRequestRepository(object):
         except Exception as exception:
             classpath = 'repository.RequestRepository.findById'
             parameters = StringUtil.clean({ 'id' : StringUtil.clean(id) })
-            exceptionMessage = StringUtil.clean(exception)
+            exceptionMessage = StringUtil.clean( exception )
             message = classpath + '  ' + parameters  + '  ' + exceptionMessage
             Logger.error( message )
 

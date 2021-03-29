@@ -22,6 +22,14 @@ class StringUtil:
     
     
     @staticmethod
+    def replace(input, oldPattern, newPattern):
+        result = None
+        if input and oldPattern and newPattern:
+            result = input.replace(oldPattern, newPattern)
+        return result
+    
+    
+    @staticmethod
     def split(input, separator=" "):
         if input == None: return None
         return str(input).split( separator )
@@ -44,11 +52,26 @@ class StringUtil:
         result = None if StringUtil.isEmpty( input ) else input
         return result
 
+    
     @staticmethod
     def clean(input):
         if input == None : return ''
         return str(input).strip()
     
+    
+    @staticmethod
+    def concat(destiny, source):
+        if destiny == None: return None
+        result = str(destiny)
+        if source != None: result = result + str(source)
+        return result
+
+    @staticmethod
+    def joinBy(source, by):
+        if source == None: return None
+        by = StringUtil.getNoneAsEmpty(by)
+        result = by.join(source)
+        return result
     
     @staticmethod
     def toInt(input):
@@ -76,3 +99,15 @@ class StringUtil:
         if input == None : return None
         result = StringUtil.clean( input )
         return json.loads( input )
+
+    @staticmethod
+    def toUpperCase(input):
+        if input == None : return None
+        result = input.upper()
+        return result
+    
+    @staticmethod
+    def toUpperCase(input):
+        if input == None : return None
+        result = input.lower()
+        return result

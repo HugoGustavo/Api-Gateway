@@ -7,15 +7,15 @@ from util.StringUtil import StringUtil
 from service.RequestService import RequestService
 
 class LoggingRequestService(object):
-    def __init__(self, service):
-        self.__service = service
+    def __init__(self, requestService):
+        self.__requestService = requestService
 
 
     def save(self, request):
         classpath = 'service.RequestService.save'
         parameters = StringUtil.clean({ 'request' : StringUtil.clean( request ) })
         Logger.debug( classpath + '  ' + parameters )
-        result = self.__service.save( request )
+        result = self.__requestService.save( request )
         return result
 
 
@@ -23,7 +23,7 @@ class LoggingRequestService(object):
         classpath = 'service.RequestService.findById'
         parameters = StringUtil.clean({ 'id' : StringUtil.clean( id ) })
         Logger.debug( classpath + '  ' + parameters )
-        result = self.__service.findById( id )
+        result = self.__requestService.findById( id )
         return result 
 
 
@@ -31,5 +31,5 @@ class LoggingRequestService(object):
         classpath = 'service.RequestService.route'
         parameters = StringUtil.clean({ 'request' : StringUtil.clean( request ) })
         Logger.debug( classpath + '  ' + parameters )
-        self.__service.route( request )
+        self.__requestService.route( request )
     

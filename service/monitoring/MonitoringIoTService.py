@@ -6,11 +6,11 @@ from util.Monitor import Monitor
 from util.JsonUtil import JsonUtil
 from util.Monitor import MetricType
 from util.StringUtil import StringUtil
-from service.ArduinoService import ArduinoService
+from service.IoTService import IoTService
 
-class MonitoringArduinoService(object):
-    def __init__(self, service):
-        self.__service = service
+class MonitoringIoTService(object):
+    def __init__(self, iotService):
+        self.__iotService = iotService
 
 
     def route(self, response):
@@ -26,5 +26,5 @@ class MonitoringArduinoService(object):
         metric.setValue( metric.getValue() + value )
         Monitor.getInstance().save( metric )
 
-        self.__service.route( response )
+        self.__iotService.route( response )
 

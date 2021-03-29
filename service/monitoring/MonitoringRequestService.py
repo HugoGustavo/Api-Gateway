@@ -10,20 +10,20 @@ from util.StringUtil import StringUtil
 from service.RequestService import RequestService
 
 class MonitoringRequestService(object):
-    def __init__(self, service):
-        self.__service = service
+    def __init__(self, requestService):
+        self.__requestService = requestService
 
 
     def save(self, request):
-        result = self.__service.save( request )
+        result = self.__requestService.save( request )
         return result
 
 
     def findById(self, id):
-        result = self.__service.findById( id ) 
+        result = self.__requestService.findById( id ) 
         return result
 
 
     def route(self, request):
-        self.__service.route( request )
+        self.__requestService.route( request )
     

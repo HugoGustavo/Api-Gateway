@@ -2,6 +2,7 @@ import sqlite3
 
 from util.Logger import Logger
 from model.Request import Request
+from model.vo.Protocol import Protocol
 from util.StringUtil import StringUtil
 
 class RequestRepository(object):
@@ -12,7 +13,7 @@ class RequestRepository(object):
     def connect(self):
         self.__connection = sqlite3.connect( 'ApiGateway.db' )
         cursor = self.__connection.cursor()
-        query = """ CREATE TABLE IF NOT EXISTS request (id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, replyHost TEXT, replyPort INTEGER, replyChannel TEXT ); """
+        query = """ CREATE TABLE IF NOT EXISTS request (id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, replyHost TEXT, replyPort INTEGER, replyChannel TEXT, replyProtocol TEXT); """
         cursor.execute( query )
         cursor.close()
 
@@ -34,13 +35,14 @@ class RequestRepository(object):
 
 
     def save(self, request):
-        query = """ INSERT INTO request (replyHost, replyPort, replyChannel) values (?, ?, ?) """
+        query = """ INSERT INTO request (replyHost, replyPort, replyChannel, replyProtocol) values (?, ?, ?, ?) """
         cursor = self.__connection.cursor()
 
         replyHost = StringUtil.clean( request.getReplyHost() ) 
         replyPort = StringUtil.clean( request.getReplyPort() )
         replyChannel = StringUtil.clean( request.getReplyChannel() )
-        parameters = (replyHost, replyPort, replyChannel)
+        replyProtocol = StringUtil.clean( request.getReplyChannel() )
+        parameters = (replyHost, replyPort, replyChannel, replyProtocol)
         cursor.execute(query, parameters)
 
         requestSaved = Request()
@@ -48,6 +50,8 @@ class RequestRepository(object):
         requestSaved.setReplyHost( request.getReplyHost() )
         requestSaved.setReplyPort( request.getReplyPort() )
         requestSaved.setReplyChannel( request.getReplyChannel() )
+        requestSaved.setReplyProtocol( request.getReplyChannel() )
+        requestSaved.setOverProtocol( request.getOverProtocol() )
         requestSaved.setMethod( request.getMethod() )
         requestSaved.setUri( request.getUri() )
         requestSaved.setHeader( request.getHeader() )
@@ -61,7 +65,7 @@ class RequestRepository(object):
 
 
     def findById(self, id):
-        query = """ SELECT replyHost, replyPort, replyChannel FROM request WHERE id = ? """
+        query = """ SELECT replyHost, replyPort, replyChannel, replyProtocol FROM request WHERE id = ? """
         parameters = (id,)
         cursor = self.__connection.cursor()
         cursor.execute(query, parameters)
@@ -72,6 +76,7 @@ class RequestRepository(object):
         request.setReplyHost( resultSet[0] )
         request.setReplyPort( resultSet[1] )
         request.setReplyChannel( resultSet[2] )
+        request.setReplyProtocol( Protocol(resultSet[3][8:]) )
 
         cursor.close()
 

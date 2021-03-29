@@ -60,7 +60,7 @@ class Monitor(object):
     
     def __init__(self):
         self.__metrics = dict()
-        self.__properties = ConfigurationDAO( 'ApiGatewayMonitoring' )
+        self.__properties = ConfigurationDAO( 'Monitoring' )
         self.__mutexSave = threading.Lock()
         self.__mutexFindByName = threading.Lock()
         self.__mutexDelete = threading.Lock()

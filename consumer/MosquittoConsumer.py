@@ -7,16 +7,24 @@ from util.Monitor import Metric
 from util.Monitor import Monitor
 from util.JsonUtil import JsonUtil
 from util.Monitor import MetricType
+from util.BrokerClient import Message
 from util.StringUtil import StringUtil
+from model.vo.Protocol import Protocol
+from proxy.BrokerProxy import BrokerProxy
 from service.RequestService import RequestService
 from model.dao.ConfigurationDAO import ConfigurationDAO
 
+from proxy.BrokerProxy import BrokerProxy
+from proxy.monitoring.MonitoringBrokerProxy import MonitoringBrokerProxy
+from proxy.logging.LoggingBrokerProxy import LoggingBrokerProxy
+from proxy.handling.ExceptionHandlingBrokerProxy import ExceptionHandlingBrokerProxy
+
+
 class MosquittoConsumer(object):
     def __init__(self):
-        self.__properties = ConfigurationDAO( 'MosquittoInformation' )
+        pass
 
-
-    def onConnect(self, client, userdata, flags, rc):
+    def onConnect(self, message):
         metric = Monitor.getInstance().findByName( 'mosquitto_avaliable_info' )
         metric = Metric() if metric == None else metric
         metric.setName( 'mosquitto_avaliable_info' )
@@ -27,8 +35,8 @@ class MosquittoConsumer(object):
         Monitor.getInstance().save( metric )
 
 
-    def onMessage(self, client, userdata, message):
-        if( '$SYS/broker/version' == message.topic ):
+    def onMessage(self, message):
+        if( '$SYS/broker/version' == message.getTopic() ):
             metric = Monitor.getInstance().findByName( 'mosquitto_version' )
             metric = Metric() if metric == None else metric
             metric.setName( 'mosquitto_version' )
@@ -39,7 +47,7 @@ class MosquittoConsumer(object):
             metric.setValue( 1.0 )
             Monitor.getInstance().save( metric )
 
-        if( '$SYS/broker/uptime' == message.topic ):
+        if( '$SYS/broker/uptime' == message.getTopic() ):
             metric = Monitor.getInstance().findByName( 'mosquitto_uptime_seconds' )
             metric = Metric() if metric == None else metric
             metric.setName( 'mosquitto_uptime_seconds' )
@@ -52,7 +60,7 @@ class MosquittoConsumer(object):
             metric.setValue( value )
             Monitor.getInstance().save( metric )
 
-        if( '$SYS/broker/clients/total' == message.topic ):
+        if( '$SYS/broker/clients/total' == message.getTopic() ):
             metric = Monitor.getInstance().findByName( 'mosquitto_clients_total' )
             metric = Metric() if metric == None else metric
             metric.setName( 'mosquitto_clients_total' )
@@ -65,7 +73,7 @@ class MosquittoConsumer(object):
             metric.setValue( value )
             Monitor.getInstance().save( metric )
 
-        if( '$SYS/broker/clients/active' == message.topic ):
+        if( '$SYS/broker/clients/active' == message.getTopic() ):
             metric = Monitor.getInstance().findByName( 'mosquitto_clients_active_total' )
             metric = Metric() if metric == None else metric
             metric.setName( 'mosquitto_clients_active_total' )
@@ -78,7 +86,7 @@ class MosquittoConsumer(object):
             metric.setValue( value )
             Monitor.getInstance().save( metric )
 
-        if( '$SYS/broker/clients/connected' == message.topic ):
+        if( '$SYS/broker/clients/connected' == message.getTopic() ):
             metric = Monitor.getInstance().findByName( 'mosquitto_clients_connected_total' )
             metric = Metric() if metric == None else metric
             metric.setName( 'mosquitto_clients_connected_total' )
@@ -91,7 +99,7 @@ class MosquittoConsumer(object):
             metric.setValue( value )
             Monitor.getInstance().save( metric )
 
-        if( '$SYS/broker/load/messages/received/1min' == message.topic ):
+        if( '$SYS/broker/load/messages/received/1min' == message.getTopic() ):
             metric = Monitor.getInstance().findByName( 'mosquitto_messages_received_1min_total_total' )
             metric = Metric() if metric == None else metric
             metric.setName( 'mosquitto_messages_received_1min_total_total' )
@@ -104,7 +112,7 @@ class MosquittoConsumer(object):
             metric.setValue( value )
             Monitor.getInstance().save( metric )
 
-        if( '$SYS/broker/load/messages/received/5min' == message.topic ):
+        if( '$SYS/broker/load/messages/received/5min' == message.getTopic() ):
             metric = Monitor.getInstance().findByName( 'mosquitto_messages_received_5min_total_total' )
             metric = Metric() if metric == None else metric
             metric.setName( 'mosquitto_messages_received_5min_total_total' )
@@ -117,7 +125,7 @@ class MosquittoConsumer(object):
             metric.setValue( value )
             Monitor.getInstance().save( metric )
 
-        if( '$SYS/broker/load/messages/received/15min' == message.topic ):
+        if( '$SYS/broker/load/messages/received/15min' == message.getTopic() ):
             metric = Monitor.getInstance().findByName( 'mosquitto_messages_received_15min_total' )
             metric = Metric() if metric == None else metric
             metric.setName( 'mosquitto_messages_received_15min_total' )
@@ -130,7 +138,7 @@ class MosquittoConsumer(object):
             metric.setValue( value )
             Monitor.getInstance().save( metric )
 
-        if( '$SYS/broker/load/messages/sent/1min' == message.topic ):
+        if( '$SYS/broker/load/messages/sent/1min' == message.getTopic() ):
             metric = Monitor.getInstance().findByName( 'mosquitto_messages_sent_1min_total' )
             metric = Metric() if metric == None else metric
             metric.setName( 'mosquitto_messages_sent_1min_total' )
@@ -143,7 +151,7 @@ class MosquittoConsumer(object):
             metric.setValue( value )
             Monitor.getInstance().save( metric )
 
-        if( '$SYS/broker/load/messages/sent/5min' == message.topic ):
+        if( '$SYS/broker/load/messages/sent/5min' == message.getTopic() ):
             metric = Monitor.getInstance().findByName( 'mosquitto_messages_sent_5min_total' )
             metric = Metric() if metric == None else metric
             metric.setName( 'mosquitto_messages_sent_5min_total' )
@@ -156,7 +164,7 @@ class MosquittoConsumer(object):
             metric.setValue( value )
             Monitor.getInstance().save( metric )
 
-        if( '$SYS/broker/load/messages/sent/15min' == message.topic ):
+        if( '$SYS/broker/load/messages/sent/15min' == message.getTopic() ):
             metric = Monitor.getInstance().findByName( 'mosquitto_messages_sent_15min_total' )
             metric = Metric() if metric == None else metric
             metric.setName( 'mosquitto_messages_sent_15min_total' )
@@ -169,7 +177,7 @@ class MosquittoConsumer(object):
             metric.setValue( value )
             Monitor.getInstance().save( metric )
 
-        if( '$SYS/broker/load/bytes/received/1min' == message.topic ):
+        if( '$SYS/broker/load/bytes/received/1min' == message.getTopic() ):
             metric = Monitor.getInstance().findByName( 'mosquitto_bytes_received_1min_total' )
             metric = Metric() if metric == None else metric
             metric.setName( 'mosquitto_bytes_received_1min_total' )
@@ -182,7 +190,7 @@ class MosquittoConsumer(object):
             metric.setValue( value )
             Monitor.getInstance().save( metric )
             
-        if( '$SYS/broker/load/bytes/received/5min' == message.topic ):
+        if( '$SYS/broker/load/bytes/received/5min' == message.getTopic() ):
             metric = Monitor.getInstance().findByName( 'mosquitto_bytes_received_5min_total' )
             metric = Metric() if metric == None else metric
             metric.setName( 'mosquitto_bytes_received_5min_total' )
@@ -195,7 +203,7 @@ class MosquittoConsumer(object):
             metric.setValue( value )
             Monitor.getInstance().save( metric )
 
-        if( '$SYS/broker/load/bytes/received/15min' == message.topic ):
+        if( '$SYS/broker/load/bytes/received/15min' == message.getTopic() ):
             metric = Monitor.getInstance().findByName( 'mosquitto_bytes_received_15min_total' )
             metric = Metric() if metric == None else metric
             metric.setName( 'mosquitto_bytes_received_15min_total' )
@@ -208,7 +216,7 @@ class MosquittoConsumer(object):
             metric.setValue( value )
             Monitor.getInstance().save( metric )
 
-        if( '$SYS/broker/load/bytes/sent/1min' == message.topic ):
+        if( '$SYS/broker/load/bytes/sent/1min' == message.getTopic() ):
             metric = Monitor.getInstance().findByName( 'mosquitto_bytes_sent_1min_total' )
             metric = Metric() if metric == None else metric
             metric.setName( 'mosquitto_bytes_sent_1min_total' )
@@ -221,7 +229,7 @@ class MosquittoConsumer(object):
             metric.setValue( value )
             Monitor.getInstance().save( metric )
 
-        if( '$SYS/broker/load/bytes/sent/5min' == message.topic ):
+        if( '$SYS/broker/load/bytes/sent/5min' == message.getTopic() ):
             metric = Monitor.getInstance().findByName( 'mosquitto_bytes_sent_5min_total' )
             metric = Metric() if metric == None else metric
             metric.setName( 'mosquitto_bytes_sent_5min_total' )
@@ -234,7 +242,7 @@ class MosquittoConsumer(object):
             metric.setValue( value )
             Monitor.getInstance().save( metric )
 
-        if( '$SYS/broker/load/bytes/sent/15min' == message.topic ):
+        if( '$SYS/broker/load/bytes/sent/15min' == message.getTopic() ):
             metric = Monitor.getInstance().findByName( 'mosquitto_bytes_sent_15min_total' )
             metric = Metric() if metric == None else metric
             metric.setName( 'mosquitto_bytes_sent_15min_total' )
@@ -247,7 +255,7 @@ class MosquittoConsumer(object):
             metric.setValue( value )
             Monitor.getInstance().save( metric )
 
-        if( '$SYS/broker/load/sockets/1min' == message.topic ):
+        if( '$SYS/broker/load/sockets/1min' == message.getTopic() ):
             metric = Monitor.getInstance().findByName( 'mosquitto_sockets_opened_1min_total' )
             metric = Metric() if metric == None else metric
             metric.setName( 'mosquitto_sockets_opened_1min_total' )
@@ -260,7 +268,7 @@ class MosquittoConsumer(object):
             metric.setValue( value )
             Monitor.getInstance().save( metric )
 
-        if( '$SYS/broker/load/sockets/5min' == message.topic ):
+        if( '$SYS/broker/load/sockets/5min' == message.getTopic() ):
             metric = Monitor.getInstance().findByName( 'mosquitto_sockets_opened_5min_total' )
             metric = Metric() if metric == None else metric
             metric.setName( 'mosquitto_sockets_opened_5min_total' )
@@ -273,7 +281,7 @@ class MosquittoConsumer(object):
             metric.setValue( value )
             Monitor.getInstance().save( metric )
 
-        if( '$SYS/broker/load/sockets/15min' == message.topic ):
+        if( '$SYS/broker/load/sockets/15min' == message.getTopic() ):
             metric = Monitor.getInstance().findByName( 'mosquitto_sockets_opened_15min_total' )
             metric = Metric() if metric == None else metric
             metric.setName( 'mosquitto_sockets_opened_15min_total' )
@@ -286,7 +294,7 @@ class MosquittoConsumer(object):
             metric.setValue( value )
             Monitor.getInstance().save( metric )
 
-        if( '$SYS/broker/load/connections/1min' == message.topic ):
+        if( '$SYS/broker/load/connections/1min' == message.getTopic() ):
             metric = Monitor.getInstance().findByName( 'mosquitto_connect_packets_1min_total' )
             metric = Metric() if metric == None else metric
             metric.setName( 'mosquitto_connect_packets_1min_total' )
@@ -299,7 +307,7 @@ class MosquittoConsumer(object):
             metric.setValue( value )
             Monitor.getInstance().save( metric )
 
-        if( '$SYS/broker/load/connections/5min' == message.topic ):
+        if( '$SYS/broker/load/connections/5min' == message.getTopic() ):
             metric = Monitor.getInstance().findByName( 'mosquitto_connect_packets_5min_total' )
             metric = Metric() if metric == None else metric
             metric.setName( 'mosquitto_connect_packets_5min_total' )
@@ -312,7 +320,7 @@ class MosquittoConsumer(object):
             metric.setValue( value )
             Monitor.getInstance().save( metric )
 
-        if( '$SYS/broker/load/connections/15min' == message.topic ):
+        if( '$SYS/broker/load/connections/15min' == message.getTopic() ):
             metric = Monitor.getInstance().findByName( 'mosquitto_connect_packets_15min_total' )
             metric = Metric() if metric == None else metric
             metric.setName( 'mosquitto_connect_packets_15min_total' )
@@ -325,7 +333,7 @@ class MosquittoConsumer(object):
             metric.setValue( value )
             Monitor.getInstance().save( metric )
 
-        if( '$SYS/broker/messages/received' == message.topic ):
+        if( '$SYS/broker/messages/received' == message.getTopic() ):
             metric = Monitor.getInstance().findByName( 'mosquitto_message_received_total' )
             metric = Metric() if metric == None else metric
             metric.setName( 'mosquitto_message_received_total' )
@@ -338,7 +346,7 @@ class MosquittoConsumer(object):
             metric.setValue( value )
             Monitor.getInstance().save( metric )
 
-        if( '$SYS/broker/messages/sent' == message.topic ):
+        if( '$SYS/broker/messages/sent' == message.getTopic() ):
             metric = Monitor.getInstance().findByName( 'mosquitto_message_sent_total' )
             metric = Metric() if metric == None else metric
             metric.setName( 'mosquitto_message_sent_total' )
@@ -351,7 +359,7 @@ class MosquittoConsumer(object):
             metric.setValue( value )
             Monitor.getInstance().save( metric )
 
-        if( '$SYS/broker/store/messages/bytes' == message.topic ):
+        if( '$SYS/broker/store/messages/bytes' == message.getTopic() ):
             metric = Monitor.getInstance().findByName( 'mosquitto_payload_retained_queued_bytes_total' )
             metric = Metric() if metric == None else metric
             metric.setName( 'mosquitto_payload_retained_queued_bytes_total' )
@@ -364,7 +372,7 @@ class MosquittoConsumer(object):
             metric.setValue( value )
             Monitor.getInstance().save( metric )
 
-        if( '$SYS/broker/subscriptions/count' == message.topic ):
+        if( '$SYS/broker/subscriptions/count' == message.getTopic() ):
             metric = Monitor.getInstance().findByName( 'mosquitto_subscriptions_active_total' )
             metric = Metric() if metric == None else metric
             metric.setName( 'mosquitto_subscriptions_active_total' )
@@ -377,7 +385,7 @@ class MosquittoConsumer(object):
             metric.setValue( value )
             Monitor.getInstance().save( metric )
 
-        if( '$SYS/broker/heap/current' == message.topic ):
+        if( '$SYS/broker/heap/current' == message.getTopic() ):
             metric = Monitor.getInstance().findByName( 'mosquitto_size_heap_memory_used_total' )
             metric = Metric() if metric == None else metric
             metric.setName( 'mosquitto_size_heap_memory_used_total' )
@@ -390,7 +398,7 @@ class MosquittoConsumer(object):
             metric.setValue( value )
             Monitor.getInstance().save( metric )
 
-        if( '$SYS/broker/bytes/received' == message.topic ):
+        if( '$SYS/broker/bytes/received' == message.getTopic() ):
             metric = Monitor.getInstance().findByName( 'mosquitto_received_bytes_total' )
             metric = Metric() if metric == None else metric
             metric.setName( 'mosquitto_received_bytes_total' )
@@ -403,7 +411,7 @@ class MosquittoConsumer(object):
             metric.setValue( value )
             Monitor.getInstance().save( metric )
             
-        if( '$SYS/broker/bytes/sent' == message.topic ):
+        if( '$SYS/broker/bytes/sent' == message.getTopic() ):
             metric = Monitor.getInstance().findByName( 'mosquitto_sent_bytes_total' )
             metric = Metric() if metric == None else metric
             metric.setName( 'mosquitto_sent_bytes_total' )
@@ -416,22 +424,21 @@ class MosquittoConsumer(object):
             metric.setValue( value )
             Monitor.getInstance().save( metric )
 
-    def onConsume(self):
-        Logger.info("Initializing MQTT Information ...")
-        self.__client = mqtt.Client()
-        self.__client.on_connect = self.onConnect
-        self.__client.on_message = self.onMessage
-
-        broker = StringUtil.clean( self.__properties.get('address.broker') )
-        port = StringUtil.toInt( self.__properties.get('port.broker') )
-        keepAliveBroker = StringUtil.toInt( self.__properties.get('keep.alive.broker') )
-        subscribe = StringUtil.clean( self.__properties.get('topic.subscribe.broker') )
-
-        self.__client.connect(broker, port, keepAliveBroker)
-        self.__client.subscribe( subscribe )
-        self.__client.loop_forever()
-    
     
     def consume(self):
-        thread = threading.Thread(target = self.onConsume)
-        thread.start() 
+        properties = ConfigurationDAO( 'Mosquitto' )
+        address = StringUtil.clean( properties.get('address.broker') )
+        port = StringUtil.toInt( properties.get('port.broker') )
+        keepAlive = StringUtil.toInt( properties.get('keep.alive.broker') )
+        topic = StringUtil.clean( properties.get('topic.subscribe.broker') )
+
+        self.__brokerProxy = BrokerProxy()
+        self.__brokerProxy = LoggingBrokerProxy( self.__brokerProxy )
+        self.__brokerProxy = MonitoringBrokerProxy( self.__brokerProxy )
+        self.__brokerProxy = ExceptionHandlingBrokerProxy( self.__brokerProxy )
+
+        self.__brokerProxy.over( Protocol.MQTT )
+        self.__brokerProxy.connect( address, port, keepAlive, self.onConnect )
+        self.__brokerProxy.subscribe( topic, self.onMessage )
+        self.__brokerProxy.consume()
+    

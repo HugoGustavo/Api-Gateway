@@ -27,4 +27,4 @@ class ExceptionHandlingResponseProducer(object):
             metric.setDescription( 'Total API response failed' )
             metric.setType( MetricType.COUNTER )
             metric.setValue( metric.getValue() + 1 )
-            Monitor.getInstance().save(metric)
+            Monitor.getInstance().save( metric )

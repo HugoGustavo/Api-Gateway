@@ -1,11 +1,13 @@
 import json
 
 class Response(object):
-    def __init__(self, id=None, replyHost=None, replyPort=None, replyChannel=None, versionProtocol=None, statusCode=None, statusMessage=None, header=None, body=None, arriveTime=None, departureTime=None):
+    def __init__(self, id=None, replyHost=None, replyPort=None, replyChannel=None, replyProtocol=None, overProtocol=None, versionProtocol=None, statusCode=None, statusMessage=None, header=None, body=None, arriveTime=None, departureTime=None):
         self.id = id
         self.replyHost = replyHost
         self.replyPort = replyPort
         self.replyChannel = replyChannel
+        self.replyProtocol = replyProtocol
+        self.overProtocol = overProtocol
         self.versionProtocol = versionProtocol
         self.statusCode = statusCode
         self.statusMessage = statusMessage
@@ -46,6 +48,21 @@ class Response(object):
     def setReplyChannel(self, replyChannel):
         self.replyChannel = replyChannel
 
+    
+    def getReplyProtocol(self):
+        return self.replyProtocol
+
+
+    def setReplyProtocol(self, replyProtocol):
+        self.replyProtocol = replyProtocol
+
+    
+    def getOverProtocol(self):
+        return self.overProtocol
+
+
+    def setOverProtocol(self, overProtocol):
+        self.overProtocol = overProtocol
 
     def getVersionProtocol(self):
         return self.versionProtocol

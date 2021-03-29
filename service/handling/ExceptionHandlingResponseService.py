@@ -7,7 +7,6 @@ from util.Monitor import MetricType
 from model.Response import Response
 from util.StringUtil import StringUtil
 from service.RequestService import RequestService
-from service.ArduinoService import ArduinoService
 
 class ExceptionHandlingResponseService(object):
     def __init__(self, responseService):

@@ -8,13 +8,13 @@ from service.ResponseService import ResponseService
 
 class LoggingResponseService(object):
     def __init__(self, service):
-        self.__service = service
+        self.__responseService = service
 
 
     def route(self, response):
         classpath = 'service.ResponseService.route'
         parameters = StringUtil.clean({ 'response' : StringUtil.clean( response ) })
         Logger.debug( classpath + '  ' + parameters )
-        self.__service.route( response )
+        self.__responseService.route( response )
 
 

@@ -24,7 +24,7 @@ class ExceptionHandlingFiwareOrionService(object):
         except Exception as exception:
             classpath = 'service.FiwareOrionService.read'
             parameters = StringUtil.clean({ 'request' : StringUtil.clean(request) })
-            exceptionMessage = StringUtil.clean(exception)
+            exceptionMessage = StringUtil.clean( exception )
             message = classpath + '  ' + parameters  + '  ' + exceptionMessage
             Logger.error( message )
 
@@ -45,7 +45,7 @@ class ExceptionHandlingFiwareOrionService(object):
         except Exception as exception:
             classpath = 'service.FiwareOrionService.create'
             parameters = StringUtil.clean({ 'request' : StringUtil.clean(request) })
-            exceptionMessage = StringUtil.clean(exception)
+            exceptionMessage = StringUtil.clean( exception )
             message = classpath + '  ' + parameters  + '  ' + exceptionMessage
             Logger.error( message )
 
@@ -66,7 +66,7 @@ class ExceptionHandlingFiwareOrionService(object):
         except Exception as exception:
             classpath = 'service.FiwareOrionService.update'
             parameters = StringUtil.clean({ 'request' : StringUtil.clean(request) })
-            exceptionMessage = StringUtil.clean(exception)
+            exceptionMessage = StringUtil.clean( exception )
             message = classpath + '  ' + parameters  + '  ' + exceptionMessage
             Logger.error( message )
 
@@ -87,7 +87,7 @@ class ExceptionHandlingFiwareOrionService(object):
         except Exception as exception:
             classpath = 'service.FiwareOrionService.delete'
             parameters = StringUtil.clean({ 'request' : StringUtil.clean(request) })
-            exceptionMessage = StringUtil.clean(exception)
+            exceptionMessage = StringUtil.clean( exception )
             message = classpath + '  ' + parameters  + '  ' + exceptionMessage
             Logger.error( message )
 

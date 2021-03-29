@@ -1,6 +1,19 @@
 import sys
 
 from consumer.MosquittoConsumer import MosquittoConsumer
+from consumer.monitoring.MonitoringMosquittoConsumer import MonitoringMosquittoConsumer
+from consumer.logging.LoggingMosquittoConsumer import LoggingMosquittoConsumer
+from consumer.handling.ExceptionHandlingMosquittoConsumer import ExceptionHandlingMosquittoConsumer
+
+from consumer.CoatiConsumer import CoatiConsumer
+from consumer.monitoring.MonitoringCoatiConsumer import MonitoringCoatiConsumer
+from consumer.logging.LoggingCoatiConsumer import LoggingCoatiConsumer
+from consumer.handling.ExceptionHandlingCoatiConsumer import ExceptionHandlingCoatiConsumer
+
+from proxy.FiwareOrionProxy import FiwareOrionProxy
+from proxy.monitoring.MonitoringFiwareOrionProxy import MonitoringFiwareOrionProxy
+from proxy.logging.LoggingFiwareOrionProxy import LoggingFiwareOrionProxy
+from proxy.handling.ExceptionHandlingFiwareOrionProxy import ExceptionHandlingFiwareOrionProxy
 
 from consumer.RequestConsumer import RequestConsumer
 from consumer.monitoring.MonitoringResponseConsumer import MonitoringResponseConsumer
@@ -22,10 +35,10 @@ from repository.monitoring.MonitoringRequestRepository import MonitoringRequestR
 from repository.logging.LoggingRequestRepository import LoggingRequestRepository
 from repository.handling.ExceptionHandlingRequestRepository import ExceptionHandlingRequestRepository
 
-from service.ArduinoService import ArduinoService
-from service.monitoring.MonitoringArduinoService import MonitoringArduinoService
-from service.logging.LoggingArduinoService import LoggingArduinoService
-from service.handling.ExceptionHandlingArduinoService import ExceptionHandlingArduinoService
+from service.IoTService import IoTService
+from service.monitoring.MonitoringIoTService import MonitoringIoTService
+from service.logging.LoggingIoTService import LoggingIoTService
+from service.handling.ExceptionHandlingIoTService import ExceptionHandlingIoTService
 
 from service.FiwareOrionService import FiwareOrionService
 from service.monitoring.MonitoringFiwareOrionService import MonitoringFiwareOrionService
@@ -45,51 +58,65 @@ from service.handling.ExceptionHandlingResponseService import ExceptionHandlingR
 
 class ApiGatewayApplication(object):
     def main(self):
-        arduinoService = ArduinoService()
-        arduinoService = LoggingArduinoService(arduinoService)
-        arduinoService = MonitoringArduinoService(arduinoService)
-        arduinoService = ExceptionHandlingArduinoService(arduinoService)
+        iotService = IoTService()
+        iotService = LoggingIoTService( iotService )
+        iotService = MonitoringIoTService( iotService )
+        iotService = ExceptionHandlingIoTService( iotService )
+
+        fiwareOrionProxy = FiwareOrionProxy()
+        fiwareOrionProxy = LoggingFiwareOrionProxy( fiwareOrionProxy )
+        fiwareOrionProxy = MonitoringFiwareOrionProxy( fiwareOrionProxy )
+        fiwareOrionProxy = ExceptionHandlingFiwareOrionProxy( fiwareOrionProxy )
 
         responseProducer = ResponseProducer()
-        responseProducer = LoggingResponseProducer(responseProducer)
-        responseProducer = MonitoringResponseProducer(responseProducer)
-        responseProducer = ExceptionHandlingResponseProducer(responseProducer)
+        responseProducer = LoggingResponseProducer( responseProducer )
+        responseProducer = MonitoringResponseProducer( responseProducer )
+        responseProducer = ExceptionHandlingResponseProducer( responseProducer )
 
         requestRepository = RequestRepository()
-        requestRepository = LoggingRequestRepository(requestRepository)
-        requestRepository = MonitoringRequestRepository(requestRepository)
-        requestRepository = ExceptionHandlingRequestRepository(requestRepository)
+        requestRepository = LoggingRequestRepository( requestRepository )
+        requestRepository = MonitoringRequestRepository( requestRepository )
+        requestRepository = ExceptionHandlingRequestRepository( requestRepository )
 
-        fiwareOrionService = FiwareOrionService(responseProducer)
-        fiwareOrionService = LoggingFiwareOrionService(fiwareOrionService)
-        fiwareOrionService = MonitoringFiwareOrionService(fiwareOrionService)
-        fiwareOrionService = ExceptionHandlingFiwareOrionService(fiwareOrionService)
+        fiwareOrionService = FiwareOrionService( fiwareOrionProxy, responseProducer )
+        fiwareOrionService = LoggingFiwareOrionService( fiwareOrionService )
+        fiwareOrionService = MonitoringFiwareOrionService( fiwareOrionService )
+        fiwareOrionService = ExceptionHandlingFiwareOrionService( fiwareOrionService )
 
-        requestService = RequestService(requestRepository, fiwareOrionService)
-        requestService = LoggingRequestService(requestService)
-        requestService = MonitoringRequestService(requestService)
-        requestService = ExceptionHandlingRequestService(requestService)
+        requestService = RequestService( requestRepository, fiwareOrionService )
+        requestService = LoggingRequestService( requestService )
+        requestService = MonitoringRequestService( requestService )
+        requestService = ExceptionHandlingRequestService( requestService )
 
-        responseService = ResponseService(requestService, arduinoService)
-        responseService = LoggingResponseService(responseService)
-        responseService = MonitoringResponseService(responseService)
-        responseService = ExceptionHandlingResponseService(responseService)
+        responseService = ResponseService( requestService, iotService )
+        responseService = LoggingResponseService( responseService )
+        responseService = MonitoringResponseService( responseService )
+        responseService = ExceptionHandlingResponseService( responseService )
 
-        responseConsumer = ResponseConsumer(responseService)
-        responseConsumer = LoggingResponseConsumer(responseConsumer)
-        responseConsumer = MonitoringResponseConsumer(responseConsumer)
-        responseConsumer = ExceptionHandlingResponseConsumer(responseConsumer)
+        responseConsumer = ResponseConsumer( responseService )
+        responseConsumer = LoggingResponseConsumer( responseConsumer )
+        responseConsumer = MonitoringResponseConsumer( responseConsumer )
+        responseConsumer = ExceptionHandlingResponseConsumer( responseConsumer )
         
-        requestConsumer = RequestConsumer(requestService)
-        requestConsumer = LoggingRequestConsumer(requestConsumer)
-        requestConsumer = MonitoringRequestConsumer(requestConsumer)
-        requestConsumer = ExceptionHandlingRequestConsumer(requestConsumer)
+        requestConsumer = RequestConsumer( requestService )
+        requestConsumer = LoggingRequestConsumer( requestConsumer )
+        requestConsumer = MonitoringRequestConsumer( requestConsumer )
+        requestConsumer = ExceptionHandlingRequestConsumer( requestConsumer )
 
         mosquittoConsumer = MosquittoConsumer()
+        mosquittoConsumer = LoggingMosquittoConsumer( mosquittoConsumer )
+        mosquittoConsumer = MonitoringMosquittoConsumer( mosquittoConsumer )
+        mosquittoConsumer = ExceptionHandlingMosquittoConsumer( mosquittoConsumer )
 
-        mosquittoConsumer.consume()
+        coatiConsumer = CoatiConsumer()
+        coatiConsumer = LoggingCoatiConsumer( coatiConsumer )
+        coatiConsumer = MonitoringCoatiConsumer( coatiConsumer )
+        coatiConsumer = ExceptionHandlingCoatiConsumer( coatiConsumer )
+
+        coatiConsumer.consume()
         requestConsumer.consume()
         responseConsumer.consume()
+        #mosquittoConsumer.consume()
         
 
 if __name__ == "__main__":

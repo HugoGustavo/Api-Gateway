@@ -3,7 +3,7 @@ import paho.mqtt.client as mqtt
 
 from util.StringUtil import StringUtil
 
-class ArduinoService(object):
+class IoTService(object):
     def __init__(self):
         pass
 
@@ -12,21 +12,26 @@ class ArduinoService(object):
         replyHost = StringUtil.clean( response.getReplyHost() )
         replyPort = StringUtil.toInt( response.getReplyPort() )
         replyChannel = StringUtil.clean( response.getReplyChannel() )
-        message = StringUtil.clean( self.__buildMessage(response) )
+        replyProtocol = response.getReplyProtocol()
+        message = self.__buildMessage( response )
+        message = StringUtil.clean( message )
 
-        client = mqtt.Client( 'ApiGateway' )
+        client = MQTTClient() if replyProtocol == Protocol.MQTT else COAPClient()
         client.connect(replyHost, replyPort)
         client.publish(replyChannel, message)
 
 
     def __buildMessage(self, response):
-        message = copy.deepcopy( response ).__dict__
+        message = copy.deepcopy( response )
+        message = message.__dict__
 
         del message['id']
         del message['replyHost']
         del message['replyPort']
         del message['replyChannel']
+        del message['replyProtocol']
+        del message['overProtocol']
         del message['arriveTime']
         del message['departureTime']
 
-        return StringUtil.clean( message )
+        return message
