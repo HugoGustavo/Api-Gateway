@@ -6,6 +6,7 @@ import prometheus_client
 
 from util.Logger import Logger
 from util.ListUtil import ListUtil
+from util.TupleUtil import TupleUtil
 from util.StringUtil import StringUtil
 from model.dao.ConfigurationDAO import ConfigurationDAO
 
@@ -105,7 +106,7 @@ class Monitor(object):
             savedMetric._value.set( value )        
         else:
             savedMetric.labels( *labelValues )._value.set( value )
-
+        
         if( type == MetricType.GAUGE ): savedMetric._created = time.time()
 
         self.__metrics[name] = savedMetric
@@ -120,17 +121,19 @@ class Monitor(object):
             self.__mutexFindByName.release()
             return None
         
-        metricSaved = self.__metrics.get(name, None)
-        if metricSaved == None: 
+        savedMetric = self.__metrics.get(name, None)
+        if savedMetric == None: 
             self.__mutexFindByName.release()
             return None
 
         metric = Metric()
         metric.setName( StringUtil.clean(name) )
-        metric.setDescription( StringUtil.clean(metricSaved._documentation) )
-        metric.setType( MetricType.GAUGE if isinstance(metricSaved, prometheus_client.Gauge) else MetricType.COUNTER )
-        metric.setLabels( dict(zip(metricSaved._labelnames, metricSaved._labelvalues)) )
-        metric.setValue( metricSaved._value.get() )
+        metric.setDescription( StringUtil.clean(savedMetric._documentation) )
+        metric.setType( MetricType.GAUGE if isinstance(savedMetric, prometheus_client.Gauge) else MetricType.COUNTER )
+        labelNames = savedMetric._labelnames
+        labelValues = savedMetric._labelvalues
+        metric.setLabels( dict(zip(labelNames, labelValues)) )
+        metric.setValue( savedMetric._value.get() if TupleUtil.isEmpty(labelNames) else savedMetric.labels( *labelNames )._value.get() )
         
         self.__mutexFindByName.release()
         return metric
@@ -143,13 +146,13 @@ class Monitor(object):
             return
         
         name = StringUtil.clean( metric.getName() )
-        metricSaved = self.__metrics.pop(name)
-        metricSaved.remove()
-        metricSaved.clear()
+        savedMetric = self.__metrics.pop(name)
+        savedMetric.remove()
+        savedMetric.clear()
 
-        REGISTRY.unregister( metricSaved )
-        del( metricSaved )
-        metricSaved = None
+        REGISTRY.unregister( savedMetric )
+        del( savedMetric )
+        savedMetric = None
 
         self.__mutexDelete.release()
     

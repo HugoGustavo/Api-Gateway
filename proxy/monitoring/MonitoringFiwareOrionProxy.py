@@ -102,7 +102,7 @@ class MonitoringFiwareOrionProxy(object):
         metric.setType( MetricType.GAUGE )
         labels = [ nic for nic in endUploadDownload ]
         labels = [ ( nic, ( endUploadDownload[nic][0] - startUploadDownload[nic][0] ) / ( end - start ) ) for nic in labels ]
-        metric.setLabels( labels )    
+        metric.setLabels( labels )
         metric.setValue( 1.0 )
         Monitor.getInstance().save( metric )
 
@@ -133,13 +133,13 @@ class MonitoringFiwareOrionProxy(object):
         metric.setDescription( 'Total number HTTP POST successfully' )
         metric.setType( MetricType.COUNTER )
         metric.setLabels( None )
-        metric.setValue( metric.getValue() + 1)
+        metric.setValue( metric.getValue() + 1 )
         Monitor.getInstance().save( metric )
 
         return result
     
     def update(self, request):
-        request.setDepartureTime(time.time())
+        request.setDepartureTime( time.time() )
 
         metric = Monitor.getInstance().findByName( 'app_patch_request_processing_seconds_total' )
         metric = Metric() if metric == None else metric
