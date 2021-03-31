@@ -23,7 +23,7 @@ class StringUtil:
     
     @staticmethod
     def replace(input, oldPattern, newPattern):
-        result = None
+        result = input
         if input and oldPattern and newPattern:
             result = input.replace(oldPattern, newPattern)
         return result

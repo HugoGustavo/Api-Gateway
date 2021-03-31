@@ -134,14 +134,8 @@ class COAPClient(object):
         port = StringUtil.getNoneAsEmpty( port )
         port = StringUtil.clean( port )
         port = StringUtil.toInt( port )
-        #path = StringUtil.clean( "/.well-known/core?rt=core.ps" )
         server = ( host, port )
-        
         self.__client = HelperClient( server=server )
-        #response = self.__client.get( path )
-        #response = response.pretty_print()
-        #response = str(response)
-        #Logger.debug( 'OK1111111111111' + str(response) )
         
         self.__wrapperOnConnect( None )
 
@@ -149,45 +143,42 @@ class COAPClient(object):
     def publish(self, topics=None, message=None):
         if self.__client == None: return None
         
-        topics = StringUtil.getNoneAsEmpty( topics )
-        topics = StringUtil.clean( topics )
-        topics = StringUtil.split( topics, "/" )
-        subPath = ListUtil.of( "ps" )
-        contentType = { 'content_type': defines.Content_types["application/link-format"] }
-        for topic in topics:
-            path = StringUtil.joinBy( subPath, "/" )
-            path = StringUtil.concat( "/", path )
-            path = StringUtil.concat( path, "/" )
-            body = StringUtil.concat( "<", topic )
-            body = StringUtil.concat( topic, ">;ct=40" )
-            response = self.__client.post( path , body, None, None, **contentType)
-            subPath = ListUtil.append( subPath, topic )
 
-        path = StringUtil.joinBy( subPath, "/" )
-        path = StringUtil.concat( "/", path )
-        path = StringUtil.concat( path, "/" )
+        topics = StringUtil.getNoneAsEmpty( topics )
+        topics = StringUtil.replace( topics, "//", "/" )
+        topics = StringUtil.clean( topics )
         message = StringUtil.getNoneAsEmpty( message )
-        response = self.__client.put( path, message )
         
-        return response
+        response = self.__client.put( topics, message )
+
+        result = Message()
+        result.setPayload( StringUtil.clean(response.payload) )
+        result.setTopic( StringUtil.clean(topics) )
+        result.setProtocol( StringUtil.clean('CoAP') )
+        
+        return result
 
     def subscribe(self, topics=None):
         self.__topics = StringUtil.getNoneAsEmpty( topics )
-        self.__topics = StringUtil.clean( self.__topics )
-        self.__topics = "/ps/" + self.__topics
         self.__topics = StringUtil.replace( self.__topics, "//", "/" )
         self.__topics = StringUtil.clean( self.__topics )
-        
+    
 
     def loopForever(self):
         response = self.__client.observe( self.__topics, callback=self.__wrapperOnMessage )
-        return response
+        
+        result = Message()
+        result.setPayload( StringUtil.clean(response.payload) if response != None else StringUtil.getNoneAsEmpty(None) )
+        result.setTopic( StringUtil.clean(self.__topics) )
+        result.setProtocol( StringUtil.clean('CoAP') )
+
+        return result
 
     
     def consume(self):
-        result = self.loopForever()
-        return result
-
+        response = self.__client.put( self.__topics, StringUtil.getNoneAsEmpty( None ) )
+        return self.loopForever()
+        
 
     def getOnMessage(self):
         return self.__onMessage
@@ -204,27 +195,10 @@ class COAPClient(object):
     def setOnConnect(self, onConnect):
         self.__onConnect = onConnect
 
-    
-    def __wrapperOnMessage(self, message):
-        if ( message == None ): return 
-        
-        if( self.__onMessage == None ): return
 
-        message = self.__client.get( self.__topics )
-        message = message.pretty_print()
-        
-        result = Message()
-        result.setPayload( message )
-        result.setTopic( StringUtil.clean(self.__topics) )
-        result.setProtocol( StringUtil.clean('CoAP') )
-       
-        self.__onMessage( result )
-
-    
     def __wrapperOnConnect(self, message):
-        if ( message == None ): return 
-
-        if( self.__onConnect == None ): return
+        if( message == None ): return
+        if( self.__onConnect == None ): return 
 
         result = Message()
         result.setPayload( StringUtil.getNoneAsEmpty(None) )
@@ -232,3 +206,17 @@ class COAPClient(object):
         result.setProtocol( StringUtil.clean('CoAP') )
         
         self.__onConnect( message )
+
+
+    def __wrapperOnMessage(self, message):
+        if( self.__onMessage == None ): return
+        
+        message = self.__client.get( self.__topics )
+        if ( message == None or message.payload == None ): return
+        
+        result = Message() 
+        result.setPayload( StringUtil.clean(message.payload) if message != None else StringUtil.getNoneAsEmpty(None) )
+        result.setTopic( StringUtil.clean(self.__topics) )
+        result.setProtocol( StringUtil.clean('CoAP') )
+       
+        self.__onMessage( result )
