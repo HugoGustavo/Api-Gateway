@@ -9,6 +9,7 @@ from util.JsonUtil import JsonUtil
 from util.Monitor import MetricType
 from util.BrokerClient import Message
 from util.StringUtil import StringUtil
+from util.ObjectUtil import ObjectUtil
 from model.vo.Protocol import Protocol
 from proxy.BrokerProxy import BrokerProxy
 from service.RequestService import RequestService

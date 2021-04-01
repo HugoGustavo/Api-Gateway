@@ -6,6 +6,7 @@ from util.Monitor import Monitor
 from model.Request import Request
 from util.Monitor import MetricType
 from util.StringUtil import StringUtil
+from util.ObjectUtil import ObjectUtil
 from proxy.monitoring.MonitoringFiwareOrionProxy import MonitoringFiwareOrionProxy
 
 class ExceptionHandlingFiwareOrionProxy(object):
@@ -22,15 +23,17 @@ class ExceptionHandlingFiwareOrionProxy(object):
             classpath = 'proxy.FiwareOrionProxy.read'
             parameters = StringUtil.clean({ 'request' : StringUtil.clean( request ) })
             exceptionMessage = StringUtil.clean(exception)
-            message = classpath + '  ' + parameters  + '  ' + exceptionMessage
-            Logger.error( message )
+            messageError = classpath + '  ' + parameters  + '  ' + exceptionMessage
+            Logger.error( messageError )
 
             metric = Monitor.getInstance().findByName( 'app_http_get_fiware_orion_failure_total' )
             metric = Metric() if metric == None else metric
             metric.setName( 'app_http_get_fiware_orion_failure_total' )
             metric.setDescription( 'Total number HTTP GET failed' )
             metric.setType( MetricType.COUNTER )
-            metric.setLabels( None )
+            protocol = StringUtil.clean( request.getOverProtocol().name ).upper()
+            labels = ObjectUtil.getDefaultIfEmpty( metric.getLabels(), [ ( 'protocol', protocol ) ] )
+            metric.setLabels( labels )
             metric.setValue( metric.getValue() + 1 )
             Monitor.getInstance().save( metric )
     
@@ -47,15 +50,17 @@ class ExceptionHandlingFiwareOrionProxy(object):
             classpath = 'proxy.FiwareOrionProxy.create'
             parameters = StringUtil.clean({ 'request' : StringUtil.clean( request ) })
             exceptionMessage = StringUtil.clean(exception)
-            message = classpath + '  ' + parameters  + '  ' + exceptionMessage
-            Logger.error( message )
+            messageError = classpath + '  ' + parameters  + '  ' + exceptionMessage
+            Logger.error( messageError )
 
             metric = Monitor.getInstance().findByName( 'app_http_post_fiware_orion_failure_total' )
             metric = Metric() if metric == None else metric
             metric.setName( 'app_http_post_fiware_orion_failure_total' )
             metric.setDescription( 'Total number HTTP POST failed' )
             metric.setType( MetricType.COUNTER )
-            metric.setLabels( None )
+            protocol = StringUtil.clean( request.getOverProtocol().name ).upper()
+            labels = ObjectUtil.getDefaultIfEmpty( metric.getLabels(), [ ( 'protocol', protocol ) ] )
+            metric.setLabels( labels )
             metric.setValue( metric.getValue() + 1 )
             Monitor.getInstance().save( metric )
         
@@ -71,15 +76,17 @@ class ExceptionHandlingFiwareOrionProxy(object):
             classpath = 'proxy.FiwareOrionProxy.update'
             parameters = StringUtil.clean({ 'request' : StringUtil.clean( request ) })
             exceptionMessage = StringUtil.clean(exception)
-            message = classpath + '  ' + parameters  + '  ' + exceptionMessage
-            Logger.error( message )
+            messageError = classpath + '  ' + parameters  + '  ' + exceptionMessage
+            Logger.error( messageError )
 
             metric = Monitor.getInstance().findByName( 'app_http_patch_fiware_orion_failure_total' )
             metric = Metric() if metric == None else metric
             metric.setName( 'app_http_patch_fiware_orion_failure_total' )
             metric.setDescription( 'Total number HTTP PATCH failed' )
             metric.setType( MetricType.COUNTER )
-            metric.setLabels( None )
+            protocol = StringUtil.clean( request.getOverProtocol().name ).upper()
+            labels = ObjectUtil.getDefaultIfEmpty( metric.getLabels(), [ ( 'protocol', protocol ) ] )
+            metric.setLabels( labels )
             metric.setValue( metric.getValue() + 1 )
             Monitor.getInstance().save( metric )
         
@@ -95,15 +102,17 @@ class ExceptionHandlingFiwareOrionProxy(object):
             classpath = 'proxy.FiwareOrionProxy.delete'
             parameters = StringUtil.clean({ 'request' : StringUtil.clean( request ) })
             exceptionMessage = StringUtil.clean(exception)
-            message = classpath + '  ' + parameters  + '  ' + exceptionMessage
-            Logger.error( message )
+            messageError = classpath + '  ' + parameters  + '  ' + exceptionMessage
+            Logger.error( messageError )
 
             metric = Monitor.getInstance().findByName( 'app_http_delete_fiware_orion_failure_total' )
             metric = Metric() if metric == None else metric
             metric.setName( 'app_http_delete_fiware_orion_failure_total' )
             metric.setDescription( 'Total number HTTP DELETE failed' )
             metric.setType( MetricType.COUNTER )
-            metric.setLabels( None )
+            protocol = StringUtil.clean( request.getOverProtocol().name ).upper()
+            labels = ObjectUtil.getDefaultIfEmpty( metric.getLabels(), [ ( 'protocol', protocol ) ] )
+            metric.setLabels( labels )
             metric.setValue( metric.getValue() + 1 )
             Monitor.getInstance().save( metric )
         

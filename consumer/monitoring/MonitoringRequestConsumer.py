@@ -8,6 +8,7 @@ from util.Monitor import Metric
 from util.Monitor import Monitor
 from util.JsonUtil import JsonUtil
 from util.Monitor import MetricType
+from util.ObjectUtil import ObjectUtil
 from util.StringUtil import StringUtil
 from model.vo.Protocol import Protocol
 from consumer.logging.LoggingRequestConsumer import LoggingRequestConsumer
@@ -34,7 +35,9 @@ class MonitoringRequestConsumer(object):
         metric.setName( 'app_request_total' )
         metric.setDescription( 'Total number of API request' )
         metric.setType( MetricType.COUNTER )
-        metric.setLabels( None )
+        protocol = StringUtil.clean( message.getProtocol() ).upper()
+        labels = ObjectUtil.getDefaultIfEmpty( metric.getLabels(), [ ( 'protocol', protocol ) ] )
+        metric.setLabels( labels )
         metric.setValue( metric.getValue() + 1 )
         Monitor.getInstance().save( metric )
 
@@ -43,8 +46,11 @@ class MonitoringRequestConsumer(object):
         metric.setName( 'app_request_bytes_total' )
         metric.setDescription( 'Total number of bytes in API request' )
         metric.setType( MetricType.COUNTER )
-        metric.setLabels( None )
         value = StringUtil.length( message.getPayload() )
+        protocol = StringUtil.clean( message.getProtocol() ).upper()
+        labels = ObjectUtil.getDefaultIfEmpty( metric.getLabels(), [ ( 'protocol', protocol ) ] )
+        labels = [ ( labelName, labelValue + value ) if labelName == protocol else ( labelName, labelValue ) for ( labelName, labelValue ) in labels ]
+        metric.setLabels( labels )
         metric.setValue( metric.getValue() + value )
         Monitor.getInstance().save( metric )
         
@@ -55,7 +61,9 @@ class MonitoringRequestConsumer(object):
         metric.setName( 'app_request_success_total' )
         metric.setDescription( 'Total API request successfully' )
         metric.setType( MetricType.COUNTER )
-        metric.setLabels( None )
+        protocol = StringUtil.clean( message.getProtocol() ).upper()
+        labels = ObjectUtil.getDefaultIfEmpty( metric.getLabels(), [ ( 'protocol', protocol ) ] )
+        metric.setLabels( labels )
         metric.setValue( metric.getValue() + 1 )
         Monitor.getInstance().save( metric )
 

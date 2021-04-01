@@ -44,7 +44,11 @@ class Message(object):
 
     
     def __str__(self):
-        return str( json.dumps(self.__dict__) )
+        result = dict()
+        result['payload'] = str(self.payload)
+        result['topic'] = str(self.topic)
+        result['protocol'] = str(self.protocol)
+        return str( result )
 
 
 class MQTTClient(object):
@@ -136,8 +140,13 @@ class COAPClient(object):
         port = StringUtil.toInt( port )
         server = ( host, port )
         self.__client = HelperClient( server=server )
+
+        result = Message()
+        result.setPayload( StringUtil.getNoneAsEmpty(None) )
+        result.setTopic( StringUtil.getNoneAsEmpty(None) )
+        result.setProtocol( StringUtil.clean('CoAP') )
         
-        self.__wrapperOnConnect( None )
+        self.__wrapperOnConnect( result )
 
 
     def publish(self, topics=None, message=None):

@@ -9,6 +9,7 @@ from util.Monitor import Monitor
 from util.JsonUtil import JsonUtil
 from util.Monitor import MetricType
 from util.StringUtil import StringUtil
+from util.ObjectUtil import ObjectUtil
 from model.vo.Protocol import Protocol
 from consumer.logging.LoggingResponseConsumer import LoggingResponseConsumer
 from model.dao.ConfigurationDAO import ConfigurationDAO
@@ -32,7 +33,9 @@ class MonitoringResponseConsumer(object):
         metric.setName( 'app_response_total' )
         metric.setDescription( 'Total number of API response' )
         metric.setType( MetricType.COUNTER )
-        metric.setLabels( None )
+        protocol = StringUtil.clean( message.getProtocol() ).upper()
+        labels = ObjectUtil.getDefaultIfEmpty( metric.getLabels(), [ ( 'protocol', protocol ) ] )
+        metric.setLabels( labels )
         metric.setValue( metric.getValue() + 1 )
         Monitor.getInstance().save( metric )
 
@@ -41,8 +44,10 @@ class MonitoringResponseConsumer(object):
         metric.setName( 'app_response_bytes_total' )
         metric.setDescription( 'Total number of bytes in API response' )
         metric.setType( MetricType.COUNTER )
-        metric.setLabels( None )
         value = StringUtil.length( message.payload )
+        protocol = StringUtil.clean( message.getProtocol() ).upper()
+        labels = ObjectUtil.getDefaultIfEmpty( metric.getLabels(), [ ( 'protocol', protocol ) ] )
+        metric.setLabels( labels )
         metric.setValue( metric.getValue() + value )
         Monitor.getInstance().save( metric )
 
@@ -53,9 +58,11 @@ class MonitoringResponseConsumer(object):
         metric.setName( 'app_response_success_total' )
         metric.setDescription( 'Total API request successfully' )
         metric.setType( MetricType.COUNTER )
-        metric.setLabels( None )
         success = response_json['statusCode'] >= 200 and response_json['statusCode'] <= 299
         value = 1.0 if success else 0.0
+        protocol = StringUtil.clean( message.getProtocol() ).upper()
+        labels = ObjectUtil.getDefaultIfEmpty( metric.getLabels(), [ ( 'protocol', protocol ) ] )
+        metric.setLabels( labels )
         metric.setValue( metric.getValue() + value )
         Monitor.getInstance().save( metric )
 
@@ -64,9 +71,11 @@ class MonitoringResponseConsumer(object):
         metric.setName( 'app_response_failure_total' )
         metric.setDescription( 'Total API request failed' )
         metric.setType( MetricType.COUNTER )
-        metric.setLabels( None )
         success = response_json['statusCode'] >= 200 and response_json['statusCode'] <= 299
         value = 1.0 if not success else 0.0
+        protocol = StringUtil.clean( message.getProtocol() ).upper()
+        labels = ObjectUtil.getDefaultIfEmpty( metric.getLabels(), [ ( 'protocol', protocol ) ] )
+        metric.setLabels( labels )
         metric.setValue( metric.getValue() + value )
         Monitor.getInstance().save( metric ) 
 

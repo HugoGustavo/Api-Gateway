@@ -3,11 +3,10 @@ import threading
 import paho.mqtt.client as mqtt
 
 from util.Logger import Logger
-from util.Monitor import Metric
 from util.Monitor import Monitor
 from util.JsonUtil import JsonUtil
-from util.Monitor import MetricType
 from util.StringUtil import StringUtil
+from util.ObjectUtil import ObjectUtil
 from model.vo.Protocol import Protocol
 from consumer.MosquittoConsumer import MosquittoConsumer
 from model.dao.ConfigurationDAO import ConfigurationDAO
@@ -20,8 +19,7 @@ from proxy.handling.ExceptionHandlingBrokerProxy import ExceptionHandlingBrokerP
 class LoggingMosquittoConsumer(object):
     def __init__(self, mosquittoConsumser):
         self.__mosquittoConsumser = mosquittoConsumser
-
-    
+            
     def onConnect(self, message):
         classpath = 'consumer.MosquittoConsumer.onConnect'
         parameters = StringUtil.clean({ 'message' : StringUtil.clean( message ) })
@@ -33,9 +31,9 @@ class LoggingMosquittoConsumer(object):
 
 
     def onMessage(self, message):
-        classpath = 'consumer.MosquittoConsumer.onMessage'
-        parameters = StringUtil.clean({ 'message' : StringUtil.clean( message ) })
-        Logger.debug( classpath + '  ' + parameters )
+        #classpath = 'consumer.MosquittoConsumer.onMessage'
+        #parameters = StringUtil.clean({ 'message' : StringUtil.clean( message ) })
+        #Logger.debug( classpath + '  ' + parameters )
 
         result = self.__mosquittoConsumser.onMessage( message )
 

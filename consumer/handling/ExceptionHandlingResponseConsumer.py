@@ -8,6 +8,7 @@ from util.Monitor import Monitor
 from util.JsonUtil import JsonUtil
 from util.Monitor import MetricType
 from util.StringUtil import StringUtil
+from util.ObjectUtil import ObjectUtil
 from model.vo.Protocol import Protocol
 from consumer.monitoring.MonitoringResponseConsumer import MonitoringResponseConsumer
 from model.dao.ConfigurationDAO import ConfigurationDAO
@@ -32,15 +33,17 @@ class ExceptionHandlingResponseConsumer(object):
             classpath = 'consumer.responseConsumer.onConnect'
             parameters = StringUtil.clean({ 'message' : StringUtil.clean( message ) })
             exceptionMessage = StringUtil.clean( exception )
-            message = classpath + '  ' + parameters  + '  ' + exceptionMessage
-            Logger.error( message )
+            messageError = classpath + '  ' + parameters  + '  ' + exceptionMessage
+            Logger.error( messageError )
 
             metric = Monitor.getInstance().findByName( 'app_response_failure_total' )
             metric = Metric() if metric == None else metric
             metric.setName( 'app_response_failure_total' )
             metric.setDescription( 'Total API response failed' )
             metric.setType( MetricType.COUNTER )
-            metric.setLabels( None )
+            protocol = StringUtil.clean( message.getProtocol() ).upper()
+            labels = ObjectUtil.getDefaultIfEmpty( metric.getLabels(), [ ( 'COAP', 0 ), ( 'MQTT', 0 ) ] )
+            metric.setLabels( labels )
             metric.setValue( metric.getValue() + 1 )
             Monitor.getInstance().save( metric ) 
 
@@ -56,15 +59,17 @@ class ExceptionHandlingResponseConsumer(object):
             classpath = 'consumer.responseConsumer.onMessage'
             parameters = StringUtil.clean({ 'message' : StringUtil.clean( message ) })
             exceptionMessage = StringUtil.clean( exception )
-            message = classpath + '  ' + parameters  + '  ' + exceptionMessage
-            Logger.error( message )
+            messageError = classpath + '  ' + parameters  + '  ' + exceptionMessage
+            Logger.error( messageError )
 
             metric = Monitor.getInstance().findByName( 'app_response_failure_total' )
             metric = Metric() if metric == None else metric
             metric.setName( 'app_response_failure_total' )
             metric.setDescription( 'Total API response failed' )
             metric.setType( MetricType.COUNTER )
-            metric.setLabels( None )
+            protocol = StringUtil.clean( message.getProtocol() ).upper()
+            labels = ObjectUtil.getDefaultIfEmpty( metric.getLabels(), [ ( 'COAP', 0 ), ( 'MQTT', 0 ) ] )
+            metric.setLabels( labels )
             metric.setValue( metric.getValue() + 1 )
             Monitor.getInstance().save( metric )
         

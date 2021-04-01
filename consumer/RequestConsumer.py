@@ -4,6 +4,7 @@ from util.Logger import Logger
 from model.Request import Request
 from util.JsonUtil import JsonUtil
 from util.StringUtil import StringUtil
+from util.ObjectUtil import ObjectUtil
 from util.BrokerClient import Message
 from model.vo.Protocol import Protocol
 from proxy.BrokerProxy import BrokerProxy

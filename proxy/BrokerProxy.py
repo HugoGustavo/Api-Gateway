@@ -1,7 +1,7 @@
 import threading
 
-from util.ObjectUtil import ObjectUtil
 from util.StringUtil import StringUtil
+from util.ObjectUtil import ObjectUtil
 from util.BrokerClient import MQTTClient
 from util.BrokerClient import COAPClient
 from model.vo.Protocol import Protocol

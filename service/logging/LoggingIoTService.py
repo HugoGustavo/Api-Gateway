@@ -4,6 +4,7 @@ from util.Monitor import Monitor
 from util.JsonUtil import JsonUtil
 from util.Monitor import MetricType
 from util.StringUtil import StringUtil
+from util.ObjectUtil import ObjectUtil
 from service.IoTService import IoTService
 
 class LoggingIoTService(object):

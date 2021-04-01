@@ -4,6 +4,7 @@ import sqlite3
 from util.Logger import Logger
 from model.Request import Request
 from util.StringUtil import StringUtil
+from util.ObjectUtil import ObjectUtil
 from model.vo.Protocol import Protocol
 from model.vo.HTTPMethod import HTTPMethod
 from model.dao.ConfigurationDAO import ConfigurationDAO

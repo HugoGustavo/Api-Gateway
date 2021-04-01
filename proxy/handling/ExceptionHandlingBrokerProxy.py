@@ -5,6 +5,7 @@ from util.Monitor import Metric
 from util.Monitor import Monitor
 from util.Monitor import MetricType
 from util.StringUtil import StringUtil
+from util.ObjectUtil import ObjectUtil
 from model.dao.ConfigurationDAO import ConfigurationDAO
 from proxy.monitoring.MonitoringBrokerProxy import MonitoringBrokerProxy
 
@@ -22,8 +23,8 @@ class ExceptionHandlingBrokerProxy(object):
             classpath = 'proxy.BrokerProxy.over'
             parameters = StringUtil.clean({ 'protocol' : StringUtil.clean( protocol ) })
             exceptionMessage = StringUtil.clean( exception )
-            message = classpath + '  ' + parameters  + '  ' + exceptionMessage
-            Logger.error( message )
+            messageError = classpath + '  ' + parameters  + '  ' + exceptionMessage
+            Logger.error( messageError )
 
         return result
     
@@ -37,8 +38,8 @@ class ExceptionHandlingBrokerProxy(object):
             classpath = 'proxy.BrokerProxy.connect'
             parameters = StringUtil.clean({ 'host' : StringUtil.clean( host ), 'port' : StringUtil.clean( port ), 'keepAlive' : StringUtil.clean( keepAlive ), 'onConnect' : StringUtil.clean( onConnect ) })
             exceptionMessage = StringUtil.clean( exception )
-            message = classpath + '  ' + parameters  + '  ' + exceptionMessage
-            Logger.error( message )
+            messageError = classpath + '  ' + parameters  + '  ' + exceptionMessage
+            Logger.error( messageError )
         
         return result
 
@@ -52,8 +53,8 @@ class ExceptionHandlingBrokerProxy(object):
             classpath = 'proxy.BrokerProxy.publish'
             parameters = StringUtil.clean({ 'topic' : StringUtil.clean( topic ), 'payload' : StringUtil.clean( payload ) })
             exceptionMessage = StringUtil.clean( exception )
-            message = classpath + '  ' + parameters  + '  ' + exceptionMessage
-            Logger.error( message )
+            messageError = classpath + '  ' + parameters  + '  ' + exceptionMessage
+            Logger.error( messageError )
         
         return result
 
@@ -67,8 +68,8 @@ class ExceptionHandlingBrokerProxy(object):
             classpath = 'proxy.BrokerProxy.subscribe'
             parameters = StringUtil.clean({ 'topic' : StringUtil.clean( topic ), 'onMessage' : StringUtil.clean( onMessage ) })
             exceptionMessage = StringUtil.clean( exception )
-            message = classpath + '  ' + parameters  + '  ' + exceptionMessage
-            Logger.error( message )
+            messageError = classpath + '  ' + parameters  + '  ' + exceptionMessage
+            Logger.error( messageError )
         
         return result
 
@@ -82,8 +83,8 @@ class ExceptionHandlingBrokerProxy(object):
             classpath = 'proxy.BrokerProxy.consume'
             parameters = StringUtil.getNoneAsEmpty( None )
             exceptionMessage = StringUtil.clean( exception )
-            message = classpath + '  ' + parameters  + '  ' + exceptionMessage
-            Logger.error( message )
+            messageError = classpath + '  ' + parameters  + '  ' + exceptionMessage
+            Logger.error( messageError )
         
         return result
 

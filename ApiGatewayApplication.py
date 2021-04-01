@@ -116,7 +116,7 @@ class ApiGatewayApplication(object):
         coatiConsumer.consume()
         requestConsumer.consume()
         responseConsumer.consume()
-        #mosquittoConsumer.consume()
+        mosquittoConsumer.consume()
         
 
 if __name__ == "__main__":

@@ -6,6 +6,7 @@ from model.Response import Response
 from util.BrokerClient import Message
 from model.vo.Protocol import Protocol
 from util.StringUtil import StringUtil
+from util.ObjectUtil import ObjectUtil
 from proxy.BrokerProxy import BrokerProxy
 from service.ResponseService import ResponseService
 from model.dao.ConfigurationDAO import ConfigurationDAO

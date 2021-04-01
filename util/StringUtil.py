@@ -77,7 +77,8 @@ class StringUtil:
     def toInt(input):
         if input == None : return None
         result = StringUtil.clean( input )
-        return int(result)
+        result = int(result) if result.isnumeric() else result
+        return result
 
     
     @staticmethod

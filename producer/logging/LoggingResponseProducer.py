@@ -1,6 +1,7 @@
 from util.Logger import Logger
 from util.JsonUtil import JsonUtil
 from util.StringUtil import StringUtil
+from util.ObjectUtil import ObjectUtil
 from producer.ResponseProducer import ResponseProducer
 
 class LoggingResponseProducer(object):

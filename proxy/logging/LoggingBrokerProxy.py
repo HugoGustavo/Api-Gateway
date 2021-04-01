@@ -3,6 +3,7 @@ import requests
 
 from util.Logger import Logger
 from util.StringUtil import StringUtil
+from util.ObjectUtil import ObjectUtil
 from model.vo.Protocol import Protocol
 from proxy.BrokerProxy import BrokerProxy
 

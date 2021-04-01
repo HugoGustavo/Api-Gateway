@@ -101,14 +101,13 @@ class Monitor(object):
             savedMetric = prometheus_client.Counter(name, description, labelNames)
         
         savedMetric._documentation = description
+        savedMetric._created = time.time()
 
         if ListUtil.isEmpty(labels):
-            savedMetric._value.set( value )        
+            savedMetric._value.set( value )
         else:
             savedMetric.labels( *labelValues )._value.set( value )
         
-        if( type == MetricType.GAUGE ): savedMetric._created = time.time()
-
         self.__metrics[name] = savedMetric
         
         self.__mutexSave.release()
@@ -121,6 +120,7 @@ class Monitor(object):
             self.__mutexFindByName.release()
             return None
         
+        name = StringUtil.clean(name)
         savedMetric = self.__metrics.get(name, None)
         if savedMetric == None: 
             self.__mutexFindByName.release()
@@ -132,6 +132,7 @@ class Monitor(object):
         metric.setType( MetricType.GAUGE if isinstance(savedMetric, prometheus_client.Gauge) else MetricType.COUNTER )
         labelNames = savedMetric._labelnames
         labelValues = savedMetric._labelvalues
+        labelValues = [ StringUtil.toInt(value) for value in labelValues ]
         metric.setLabels( dict(zip(labelNames, labelValues)) )
         metric.setValue( savedMetric._value.get() if TupleUtil.isEmpty(labelNames) else savedMetric.labels( *labelNames )._value.get() )
         

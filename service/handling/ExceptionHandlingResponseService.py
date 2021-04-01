@@ -6,6 +6,7 @@ from util.JsonUtil import JsonUtil
 from util.Monitor import MetricType
 from model.Response import Response
 from util.StringUtil import StringUtil
+from util.ObjectUtil import ObjectUtil
 from service.RequestService import RequestService
 
 class ExceptionHandlingResponseService(object):
@@ -22,16 +23,18 @@ class ExceptionHandlingResponseService(object):
             classpath = 'service.ResponseService.route'
             parameters = StringUtil.clean({ 'response' : StringUtil.clean( response ) })
             exceptionMessage = StringUtil.clean( exception )
-            message = classpath + '  ' + parameters + '  ' + exceptionMessage
-            Logger.error( message )
+            messageError = classpath + '  ' + parameters + '  ' + exceptionMessage
+            Logger.error( messageError )
 
             metric = Monitor.getInstance().findByName( 'app_response_failure_total' )
             metric = Metric() if metric == None else metric
             metric.setName( 'app_response_failure_total' )
             metric.setDescription( 'Total API response failed' )
             metric.setType( MetricType.COUNTER )
-            metric.setLabels( None )
-            metric.setValue( metric.getValue() + 1)
+            protocol = StringUtil.clean( response.getOverProtocol().name ).upper()
+            labels = ObjectUtil.getDefaultIfEmpty( metric.getLabels(), [ ( 'protocol', protocol ) ] )
+            metric.setLabels( labels )
+            metric.setValue( metric.getValue() + 1 )
             Monitor.getInstance().save( metric )
     
         return result

@@ -3,11 +3,10 @@ import threading
 import paho.mqtt.client as mqtt
 
 from util.Logger import Logger
-from util.Monitor import Metric
 from util.Monitor import Monitor
 from util.JsonUtil import JsonUtil
-from util.Monitor import MetricType
 from util.StringUtil import StringUtil
+from util.ObjectUtil import ObjectUtil
 from model.vo.Protocol import Protocol
 from consumer.logging.LoggingCoatiConsumer import LoggingCoatiConsumer
 from model.dao.ConfigurationDAO import ConfigurationDAO

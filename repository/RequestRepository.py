@@ -4,6 +4,7 @@ from util.Logger import Logger
 from model.Request import Request
 from model.vo.Protocol import Protocol
 from util.StringUtil import StringUtil
+from util.ObjectUtil import ObjectUtil
 
 class RequestRepository(object):
     def __init__(self):
@@ -42,8 +43,8 @@ class RequestRepository(object):
         replyPort = StringUtil.clean( request.getReplyPort() )
         replyChannel = StringUtil.clean( request.getReplyChannel() )
         replyProtocol = StringUtil.clean( request.getReplyProtocol() )
-        parameters = (replyHost, replyPort, replyChannel, replyProtocol)
-        cursor.execute(query, parameters)
+        parameters = ( replyHost, replyPort, replyChannel, replyProtocol )
+        cursor.execute( query, parameters )
 
         requestSaved = Request()
         requestSaved.setId( cursor.lastrowid )

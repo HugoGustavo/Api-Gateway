@@ -5,6 +5,7 @@ from util.Logger import Logger
 from model.Request import Request
 from model.Response import Response
 from util.StringUtil import StringUtil
+from util.ObjectUtil import ObjectUtil
 from producer.ResponseProducer import ResponseProducer
 from model.dao.ConfigurationDAO import ConfigurationDAO
 

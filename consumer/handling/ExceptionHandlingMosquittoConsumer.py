@@ -32,8 +32,8 @@ class ExceptionHandlingMosquittoConsumer(object):
             classpath = 'consumer.MosquittoConsumer.onConnect'
             parameters = StringUtil.clean({ 'message' : StringUtil.clean( message ) })
             exceptionMessage = StringUtil.clean( exception )
-            message = classpath + '  ' + parameters  + '  ' + exceptionMessage
-            Logger.error( message )
+            messageError = classpath + '  ' + parameters  + '  ' + exceptionMessage
+            Logger.error( messageError )
 
         return result
 
@@ -42,14 +42,14 @@ class ExceptionHandlingMosquittoConsumer(object):
         result = None
 
         try:
-            Result = self.__mosquittoConsumser.onMessage( message )
+            result = self.__mosquittoConsumser.onMessage( message )
         
         except Exception as exception:
             classpath = 'consumer.RequestConsumer.onMessage'
             parameters = StringUtil.clean({ 'message' : StringUtil.clean( message ) })
             exceptionMessage = StringUtil.clean( exception )
-            message = classpath + '  ' + parameters  + '  ' + exceptionMessage
-            Logger.error( message )
+            messageError = classpath + '  ' + parameters  + '  ' + exceptionMessage
+            Logger.error( messageError )
 
         return result
         

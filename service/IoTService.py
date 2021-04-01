@@ -4,6 +4,7 @@ import paho.mqtt.client as mqtt
 from model.Response import Response
 from model.vo.Protocol import Protocol
 from util.StringUtil import StringUtil
+from util.ObjectUtil import ObjectUtil
 from util.BrokerClient import MQTTClient
 from util.BrokerClient import COAPClient
 

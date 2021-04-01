@@ -32,8 +32,8 @@ class ExceptionHandlingCoatiConsumer(object):
             classpath = 'consumer.CoatiConsumer.onConnect'
             parameters = StringUtil.clean({ 'message' : StringUtil.clean( message ) })
             exceptionMessage = StringUtil.clean( exception )
-            message = classpath + '  ' + parameters  + '  ' + exceptionMessage
-            Logger.error( message )
+            messageError = classpath + '  ' + parameters  + '  ' + exceptionMessage
+            Logger.error( messageError )
         
         return result
 
@@ -48,8 +48,8 @@ class ExceptionHandlingCoatiConsumer(object):
             classpath = 'consumer.RequestConsumer.onMessage'
             parameters = StringUtil.clean({ 'message' : StringUtil.clean( message ) })
             exceptionMessage = StringUtil.clean( exception )
-            message = classpath + '  ' + parameters  + '  ' + exceptionMessage
-            Logger.error( message )
+            messageError = classpath + '  ' + parameters  + '  ' + exceptionMessage
+            Logger.error( messageError )
 
         return result
         

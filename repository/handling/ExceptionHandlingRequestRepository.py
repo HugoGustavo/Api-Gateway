@@ -2,6 +2,8 @@ from util.Logger import Logger
 from util.Monitor import Metric
 from util.Monitor import Monitor
 from util.JsonUtil import JsonUtil
+from util.ObjectUtil import ObjectUtil
+from util.StringUtil import StringUtil
 from util.Monitor import MetricType
 from util.StringUtil import StringUtil
 from repository.RequestRepository import RequestRepository
@@ -20,16 +22,8 @@ class ExceptionHandlingRequestRepository(object):
             classpath = 'repository.RequestRepository.connect'
             parameters = StringUtil.getNoneAsEmpty(None)
             exceptionMessage = StringUtil.clean( exception )
-            message = classpath + '  ' + parameters  + '  ' + exceptionMessage
-            Logger.error( message )
-
-            metric = Monitor.getInstance().findByName( 'app_request_failure_total' )
-            metric = Metric() if metric == None else metric
-            metric.setName( 'app_request_failure_total' )
-            metric.setDescription( 'Total API request failed' )
-            metric.setType( MetricType.COUNTER )
-            metric.setValue( metric.getValue() + 1 )
-            Monitor.getInstance().save( metric )
+            messageError = classpath + '  ' + parameters  + '  ' + exceptionMessage
+            Logger.error( messageError )
         
         return result
 
@@ -43,17 +37,9 @@ class ExceptionHandlingRequestRepository(object):
             classpath = 'repository.RequestRepository.isConnected'
             parameters = StringUtil.getNoneAsEmpty(None)
             exceptionMessage = StringUtil.clean( exception )
-            message = classpath + '  ' + parameters  + '  ' + exceptionMessage
-            Logger.error( message )
-
-            metric = Monitor.getInstance().findByName( 'app_request_failure_total' )
-            metric = Metric() if metric == None else metric
-            metric.setName( 'app_request_failure_total' )
-            metric.setDescription( 'Total API request failed' )
-            metric.setType( MetricType.COUNTER )
-            metric.setValue( metric.getValue() + 1 )
-            Monitor.getInstance().save( metric )
-        
+            messageError = classpath + '  ' + parameters  + '  ' + exceptionMessage
+            Logger.error( messageError )
+       
         return result
 
 
@@ -66,16 +52,9 @@ class ExceptionHandlingRequestRepository(object):
             classpath = 'repository.RequestRepository.disconnect'
             parameters = StringUtil.getNoneAsEmpty(None)
             exceptionMessage = StringUtil.clean( exception )
-            message = classpath + '  ' + parameters  + '  ' + exceptionMessage
-            Logger.error( message )
+            messageError = classpath + '  ' + parameters  + '  ' + exceptionMessage
+            Logger.error( messageError )
 
-            metric = Monitor.getInstance().findByName( 'app_request_failure_total' )
-            metric = Metric() if metric == None else metric
-            metric.setName( 'app_request_failure_total' )
-            metric.setDescription( 'Total API request failed' )
-            metric.setType( MetricType.COUNTER )
-            metric.setValue( metric.getValue() + 1 )
-            Monitor.getInstance().save( metric )
 
         return result
 
@@ -89,16 +68,9 @@ class ExceptionHandlingRequestRepository(object):
             classpath = 'repository.RequestRepository.commit'
             parameters = StringUtil.getNoneAsEmpty(None)
             exceptionMessage = StringUtil.clean( exception )
-            message = classpath + '  ' + parameters  + '  ' + exceptionMessage
-            Logger.error( message )
+            messageError = classpath + '  ' + parameters  + '  ' + exceptionMessage
+            Logger.error( messageError )
 
-            metric = Monitor.getInstance().findByName( 'app_request_failure_total' )
-            metric = Metric() if metric == None else metric
-            metric.setName( 'app_request_failure_total' )
-            metric.setDescription( 'Total API request failed' )
-            metric.setType( MetricType.COUNTER )
-            metric.setValue( metric.getValue() + 1 )
-            Monitor.getInstance().save( metric )
         
         return result
 
@@ -112,16 +84,9 @@ class ExceptionHandlingRequestRepository(object):
             classpath = 'repository.RequestRepository.save'
             parameters = StringUtil.clean({ 'request' : StringUtil.clean(request) })
             exceptionMessage = StringUtil.clean( exception )
-            message = classpath + '  ' + parameters  + '  ' + exceptionMessage
-            Logger.error( message )
+            messageError = classpath + '  ' + parameters  + '  ' + exceptionMessage
+            Logger.error( messageError )
 
-            metric = Monitor.getInstance().findByName( 'app_request_failure_total' )
-            metric = Metric() if metric == None else metric
-            metric.setName( 'app_request_failure_total' )
-            metric.setDescription( 'Total API request failed' )
-            metric.setType( MetricType.COUNTER )
-            metric.setValue( metric.getValue() + 1 )
-            Monitor.getInstance().save( metric )
 
         return result
 
@@ -134,16 +99,9 @@ class ExceptionHandlingRequestRepository(object):
             classpath = 'repository.RequestRepository.findById'
             parameters = StringUtil.clean({ 'id' : StringUtil.clean(id) })
             exceptionMessage = StringUtil.clean( exception )
-            message = classpath + '  ' + parameters  + '  ' + exceptionMessage
-            Logger.error( message )
+            messageError = classpath + '  ' + parameters  + '  ' + exceptionMessage
+            Logger.error( messageError )
 
-            metric = Monitor.getInstance().findByName( 'app_request_failure_total' )
-            metric = Metric() if metric == None else metric
-            metric.setName( 'app_request_failure_total' )
-            metric.setDescription( 'Total API request failed' )
-            metric.setType( MetricType.COUNTER)
-            metric.setValue( metric.getValue() + 1)
-            Monitor.getInstance().save( metric )
         
         return result
 
