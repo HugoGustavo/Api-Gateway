@@ -138,8 +138,11 @@ class COAPClient(object):
         port = StringUtil.getNoneAsEmpty( port )
         port = StringUtil.clean( port )
         port = StringUtil.toInt( port )
+        keepAlive = StringUtil.clean( port )
+        keepAlive = StringUtil.toInt( port )
         server = ( host, port )
         self.__client = HelperClient( server=server )
+        self.__keepAlive = keepAlive
 
         result = Message()
         result.setPayload( StringUtil.getNoneAsEmpty(None) )
@@ -158,7 +161,7 @@ class COAPClient(object):
         topics = StringUtil.clean( topics )
         message = StringUtil.getNoneAsEmpty( message )
         
-        response = self.__client.put( topics, message )
+        response = self.__client.put( topics, message, timeout=self.__keepAlive )
 
         result = Message()
         result.setPayload( StringUtil.clean(response.payload) )
@@ -174,7 +177,7 @@ class COAPClient(object):
     
 
     def loopForever(self):
-        response = self.__client.observe( self.__topics, callback=self.__wrapperOnMessage )
+        response = self.__client.observe( self.__topics, callback=self.__wrapperOnMessage, timeout=self.__keepAlive )
         
         result = Message()
         result.setPayload( StringUtil.clean(response.payload) if response != None else StringUtil.getNoneAsEmpty(None) )
