@@ -1,5 +1,6 @@
 import json
 import enum
+import time
 import threading
 import paho.mqtt.client as mqtt
 
@@ -133,16 +134,16 @@ class COAPClient(object):
     
  
     def connect(self, host="127.0.0.1", port=5683, keepAlive=60):
-        host = StringUtil.getNoneAsEmpty( host )
-        host = StringUtil.clean( host )
-        port = StringUtil.getNoneAsEmpty( port )
-        port = StringUtil.clean( port )
-        port = StringUtil.toInt( port )
-        keepAlive = StringUtil.clean( port )
-        keepAlive = StringUtil.toInt( port )
-        server = ( host, port )
+        self.__host = StringUtil.getNoneAsEmpty( host )
+        self.__host = StringUtil.clean( self.__host )
+        self.__port = StringUtil.getNoneAsEmpty( port )
+        self.__port = StringUtil.clean( self.__port )
+        self.__port = StringUtil.toInt( self.__port )
+        self.__keepAlive = StringUtil.clean( keepAlive )
+        self.__keepAlive = StringUtil.toInt( self.__keepAlive )
+        server = ( self.__host, self.__port )
         self.__client = HelperClient( server=server )
-        self.__keepAlive = keepAlive
+        self.__timestampConnection = time.time()
 
         result = Message()
         result.setPayload( StringUtil.getNoneAsEmpty(None) )
@@ -160,6 +161,8 @@ class COAPClient(object):
         topics = StringUtil.replace( topics, "//", "/" )
         topics = StringUtil.clean( topics )
         message = StringUtil.getNoneAsEmpty( message )
+
+        if ( self.__isConnectionExpired() ): self.__reconnect()
         
         response = self.__client.put( topics, message, timeout=self.__keepAlive )
 
@@ -177,6 +180,8 @@ class COAPClient(object):
     
 
     def loopForever(self):
+        if ( self.__isConnectionExpired() ): self.__reconnect()
+        
         response = self.__client.observe( self.__topics, callback=self.__wrapperOnMessage, timeout=self.__keepAlive )
         
         result = Message()
@@ -188,7 +193,11 @@ class COAPClient(object):
 
     
     def consume(self):
+        if ( StringUtil.isEmpty( self.__topics ) ): return
+
+        if ( self.__isConnectionExpired() ): self.__reconnect()
         response = self.__client.put( self.__topics, StringUtil.getNoneAsEmpty( None ) )
+        
         return self.loopForever()
         
 
@@ -225,6 +234,7 @@ class COAPClient(object):
         
         message = None
         while message == None or message.payload == None:
+            if ( self.__isConnectionExpired() ):  self.__reconnect()            
             message = self.__client.get( self.__topics )
         
         result = Message() 
@@ -233,3 +243,20 @@ class COAPClient(object):
         result.setProtocol( StringUtil.clean('CoAP') )
        
         self.__onMessage( result )
+
+    
+    def __isConnectionExpired(self):
+        now = time.time()
+        return (now - self.__timestampConnection ) > self.__keepAlive
+
+
+    def __stop(self):
+        if self.__client == None: return
+        self.__client.stop()
+    
+    
+    def __reconnect(self):
+        if self.__client == None: return
+        self.__stop()
+        self.connect(self.__host, self.__port, self.__keepAlive)
+        self.consume()
