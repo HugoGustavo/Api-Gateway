@@ -223,8 +223,9 @@ class COAPClient(object):
     def __wrapperOnMessage(self, message):
         if( self.__onMessage == None ): return
         
-        message = self.__client.get( self.__topics )
-        if ( message == None or message.payload == None ): return
+        message = None
+        while message == None or message.payload == None:
+            message = self.__client.get( self.__topics )
         
         result = Message() 
         result.setPayload( StringUtil.clean(message.payload) if message != None else StringUtil.getNoneAsEmpty(None) )
