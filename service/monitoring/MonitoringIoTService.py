@@ -25,7 +25,6 @@ class MonitoringIoTService(object):
         value = response.getDepartureTime() - response.getArriveTime()
         protocol = StringUtil.clean( response.getOverProtocol().name ).upper()
         labels = ObjectUtil.getDefaultIfEmpty( metric.getLabels(), [ ( 'protocol', protocol ) ] )
-        labels = [ ( labelName, labelValue + value ) if labelName == protocol else ( labelName, labelValue ) for ( labelName, labelValue ) in labels ]
         metric.setLabels( labels )
         metric.setValue( metric.getValue() + value )
         Monitor.getInstance().save( metric )
