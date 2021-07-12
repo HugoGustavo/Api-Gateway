@@ -179,9 +179,7 @@ class COAPClient(object):
         self.__topics = StringUtil.clean( self.__topics )
     
 
-    def loopForever(self):
-        if ( self.__isConnectionExpired() ): self.__reconnect()
-        
+    def loopForever(self):        
         response = self.__client.observe( self.__topics, callback=self.__wrapperOnMessage, timeout=self.__keepAlive )
         
         result = Message()
@@ -194,9 +192,8 @@ class COAPClient(object):
     
     def consume(self):
         if ( StringUtil.isEmpty( self.__topics ) ): return
-
-        if ( self.__isConnectionExpired() ): self.__reconnect()
-        response = self.__client.put( self.__topics, StringUtil.getNoneAsEmpty( None ) )
+        
+        self.__client.put( self.__topics, StringUtil.getNoneAsEmpty( None ) )
         
         return self.loopForever()
         
@@ -247,16 +244,18 @@ class COAPClient(object):
     
     def __isConnectionExpired(self):
         now = time.time()
-        return (now - self.__timestampConnection ) > self.__keepAlive
+        return ( now - self.__timestampConnection ) >= self.__keepAlive
 
 
-    def __stop(self):
+    def __disconnect(self):
         if self.__client == None: return
         self.__client.stop()
+        del(self.__client)
+        self.__client = None
     
     
     def __reconnect(self):
         if self.__client == None: return
-        self.__stop()
+        self.__disconnect()
         self.connect(self.__host, self.__port, self.__keepAlive)
         self.consume()
