@@ -180,7 +180,7 @@ class COAPClient(object):
     
 
     def loopForever(self):        
-        response = self.__client.observe( self.__topics, callback=self.__wrapperOnMessage, timeout=self.__keepAlive )
+        response = self.__client.observe( self.__topics, callback=self.__wrapperOnMessage )
         
         result = Message()
         result.setPayload( StringUtil.clean(response.payload) if response != None else StringUtil.getNoneAsEmpty(None) )
