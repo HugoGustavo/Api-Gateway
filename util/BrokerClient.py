@@ -161,7 +161,7 @@ class COAPClient(object):
         topics = StringUtil.replace( topics, "//", "/" )
         topics = StringUtil.clean( topics )
         message = StringUtil.getNoneAsEmpty( message )
-       
+        
         response = self.__client.put( topics, message, timeout=self.__keepAlive )
 
         result = Message()
@@ -226,15 +226,19 @@ class COAPClient(object):
 
     def __wrapperOnMessage(self, message):
         if( self.__onMessage == None ): return
-                 
-        message = self.__client.get( self.__topics, timeout=self.__keepAlive )
-               
-        result = Message() 
-        result.setPayload( StringUtil.clean(message.payload) if message != None else StringUtil.getNoneAsEmpty(None) )
-        result.setTopic( StringUtil.clean(self.__topics) )
-        result.setProtocol( StringUtil.clean('CoAP') )
+
+        while True :        
+            message = None
+            while message == None or message.payload == None:
+                message = self.__client.get( self.__topics, timeout=self.__keepAlive )
+            self.__client.put( self.__topics, StringUtil.getNoneAsEmpty( None ), timeout=self.__keepAlive )
+
+            result = Message() 
+            result.setPayload( StringUtil.clean(message.payload) if message != None else StringUtil.getNoneAsEmpty(None) )
+            result.setTopic( StringUtil.clean(self.__topics) )
+            result.setProtocol( StringUtil.clean('CoAP') )
        
-        self.__onMessage( result )
+            self.__onMessage( result )
 
     
     def __isConnectionExpired(self):
